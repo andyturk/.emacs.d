@@ -52,10 +52,13 @@
 
 (require 'fill-column-indicator)
 (defvar auto-minor-mode-alist
-  '(("\\.c\\'" . fci-mode)
-    ("\\.c\\'" . whitespace-mode)
-    ("\\.h\\'" . fci-mode)
-    ("\\.c\\'" . whitespace-mode)
+  '(("\\.c\\'"  . fci-mode)
+    ("\\.cc\\'" . fci-mode)
+    ("\\.h\\'"  . fci-mode)
+
+    ("\\.c\\'"  . whitespace-mode)
+    ("\\.cc\\'" . whitespace-mode)
+    ("\\.c\\'"  . whitespace-mode)
 )
   "Alist of filename patterns vs correpsonding minor mode functions, see `auto-mode-alist'
 All elements of this alist are checked, meaning you can enable multiple minor modes for the same regexp.")
