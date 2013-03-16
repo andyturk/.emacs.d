@@ -3,3 +3,4 @@ elpa/archives/
 *.elc
 *~
 ._*
+\#*#
