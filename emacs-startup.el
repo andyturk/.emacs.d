@@ -90,29 +90,29 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (tool-bar-mode 0)
 (load-theme 'solarized-dark t)
 
-(if (eq system-type 'windows-nt)
-    ;; When running in Windows, we want to use an alternate shell so we
-    ;; can be more unixy.
-    (setq shell-file-name "C:/MinGW/msys/1.0/bin/bash")
+(when (eq system-type 'windows-nt)
+  ;; When running in Windows, we want to use an alternate shell so we
+  ;; can be more unixy.
+  (setq shell-file-name "C:/MinGW/msys/1.0/bin/bash")
   (setq explicit-shell-file-name shell-file-name)
   (setenv "PATH"
-          (concat ".:/usr/local/bin:/mingw/bin:/bin:"
+          (concat ".:/MinGW/msys/1.0/bin:/mingw/bin:/bin:"
            (replace-regexp-in-string " " "\\\\ "
             (replace-regexp-in-string "\\\\" "/"
              (replace-regexp-in-string "\\([A-Za-z]\\):" "/\\1"
               (getenv "PATH"))))))
 )
 
-(if (eq system-type 'darwin)
- (setq exec-path
-       (quote ("/usr/bin"
-               "/bin"
-               "/usr/sbin"
-               "/sbin"
-               "/Applications/Emacs.app/Contents/MacOS/bin"
-               "/Users/andy/yagarto-4.7.1/bin"
-               "/usr/local/bin")))
- (setq gud-gdb-command-name "arm-none-eabi-gdb -i=mi")
+(when (eq system-type 'darwin)
+  (setq exec-path
+        (quote ("/usr/bin"
+                "/bin"
+                "/usr/sbin"
+                "/sbin"
+                "/Applications/Emacs.app/Contents/MacOS/bin"
+                "/Users/andy/yagarto-4.7.1/bin"
+                "/usr/local/bin")))
+  (setq gud-gdb-command-name "arm-none-eabi-gdb -i=mi")
 )
 
 (custom-set-faces
