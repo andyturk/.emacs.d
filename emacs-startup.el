@@ -8,24 +8,6 @@
 
 (put 'narrow-to-region 'disabled nil)
 
-;; junk for ruby
-(add-to-list 'load-path "~/.emacs.d/ruby")
-(autoload 'ruby-mode "ruby-mode"
-    "Mode for editing ruby source files")
-(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
-(add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
-(autoload 'run-ruby "inf-ruby"
-    "Run an inferior Ruby process")
-(autoload 'inf-ruby-keys "inf-ruby"
-    "Set local key defs for inf-ruby in ruby-mode")
-(add-hook 'ruby-mode-hook
-    '(lambda ()
-        (inf-ruby-keys)))
-;; If you have Emacs 19.2x or older, use rubydb2x                              
-(autoload 'rubydb "rubydb3x" "Ruby debugger" t)
-;; uncomment the next line if you want syntax highlighting                     
-(add-hook 'ruby-mode-hook 'turn-on-font-lock)
-
 (add-to-list 'custom-theme-load-path "~/.emacs.d/elpa/color-theme-solarized-20121209.1204")
 
 (custom-set-variables
@@ -35,8 +17,6 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (solarized-dark)))
  '(custom-safe-themes (quote ("1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
- '(exec-path (quote ("/usr/bin" "/bin" "/usr/sbin" "/sbin" "/Applications/Emacs.app/Contents/MacOS/bin" "/Users/andy/yagarto-4.7.1/bin" "/usr/local/bin")))
- '(gud-gdb-command-name "arm-none-eabi-gdb -i=mi")
  '(inhibit-startup-screen t)
  '(large-file-warning-threshold nil)
  '(scroll-bar-mode nil))
@@ -109,9 +89,35 @@ the checking happens for all pairs in auto-minor-mode-alist"
 
 (tool-bar-mode 0)
 (load-theme 'solarized-dark t)
+
+(if (eq system-type 'windows-nt)
+    ;; When running in Windows, we want to use an alternate shell so we
+    ;; can be more unixy.
+    (setq shell-file-name "C:/MinGW/msys/1.0/bin/bash")
+  (setq explicit-shell-file-name shell-file-name)
+  (setenv "PATH"
+          (concat ".:/usr/local/bin:/mingw/bin:/bin:"
+           (replace-regexp-in-string " " "\\\\ "
+            (replace-regexp-in-string "\\\\" "/"
+             (replace-regexp-in-string "\\([A-Za-z]\\):" "/\\1"
+              (getenv "PATH"))))))
+)
+
+(if (eq system-type 'darwin)
+ (setq exec-path
+       (quote ("/usr/bin"
+               "/bin"
+               "/usr/sbin"
+               "/sbin"
+               "/Applications/Emacs.app/Contents/MacOS/bin"
+               "/Users/andy/yagarto-4.7.1/bin"
+               "/usr/local/bin")))
+ (setq gud-gdb-command-name "arm-none-eabi-gdb -i=mi")
+)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:family "Consolas" :foundry "outline" :slant normal :weight normal :height 113 :width normal)))))
