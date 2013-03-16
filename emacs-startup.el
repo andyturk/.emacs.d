@@ -1,7 +1,7 @@
 (setq default-tab-width 4)
 (setq-default indent-tabs-mode nil)
 (add-to-list 'load-path "/Users/andy/.emacs.d")
-(add-to-list 'load-path "/Users/andy/code/git-emacs")
+(add-to-list 'load-path "/Users/andy/.emacs.d/git-emacs")
 (require 'git)
 (require 'git-blame)
 (require 'egg)
