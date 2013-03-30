@@ -35,7 +35,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (solarized-dark)))
  '(custom-safe-themes (quote ("1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
- '(exec-path (quote ("/usr/bin" "/bin" "/usr/sbin" "/sbin" "/Applications/Emacs.app/Contents/MacOS/bin" "/Users/andy/yagarto-4.7.1/bin" "/usr/local/bin")))
+ '(exec-path (quote ("/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/bin" "/Applications/Emacs.app/Contents/MacOS/bin" "/usr/local/msp430/bin" "/usr/local/arm/gcc-arm-none-eabi-4_7-2013q1/bin")))
  '(gud-gdb-command-name "arm-none-eabi-gdb -i=mi")
  '(inhibit-startup-screen t)
  '(large-file-warning-threshold nil)
