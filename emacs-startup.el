@@ -1,3 +1,8 @@
+(tool-bar-mode -1)
+;;(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(setq split-height-threshold nil)
+
 (setq default-tab-width 4)
 (setq-default indent-tabs-mode nil)
 (add-to-list 'load-path "/Users/andy/.emacs.d")
@@ -5,26 +10,29 @@
 (require 'git)
 (require 'git-blame)
 (require 'egg)
+(require 'package)
+
+;; Add the original Emacs Lisp Package Archive
+(add-to-list 'package-archives
+             '("elpa" . "http://tromey.com/elpa/"))
+;; Add the user-contributed repository
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
 
 (put 'narrow-to-region 'disabled nil)
 
-;; junk for ruby
-(add-to-list 'load-path "~/.emacs.d/ruby")
-(autoload 'ruby-mode "ruby-mode"
-    "Mode for editing ruby source files")
-(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
-(add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
-(autoload 'run-ruby "inf-ruby"
-    "Run an inferior Ruby process")
-(autoload 'inf-ruby-keys "inf-ruby"
-    "Set local key defs for inf-ruby in ruby-mode")
-(add-hook 'ruby-mode-hook
-    '(lambda ()
-        (inf-ruby-keys)))
-;; If you have Emacs 19.2x or older, use rubydb2x                              
-(autoload 'rubydb "rubydb3x" "Ruby debugger" t)
-;; uncomment the next line if you want syntax highlighting                     
-(add-hook 'ruby-mode-hook 'turn-on-font-lock)
+
+(defun set-exec-path-from-shell-PATH ()
+  "Set up Emacs' `exec-path' and PATH environment variable to match that used by the user's shell.
+
+This is particularly useful under Mac OSX, where GUI apps are not started from a shell."
+  (interactive)
+  (let ((path-from-shell (replace-regexp-in-string "[ \t\n]*$" "" (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
+    (setenv "PATH" path-from-shell)
+    (setq exec-path (split-string path-from-shell path-separator))))
+
+(when (memq window-system '(mac ns))
+  (set-exec-path-from-shell-PATH))
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/elpa/color-theme-solarized-20121209.1204")
 
@@ -35,7 +43,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (solarized-dark)))
  '(custom-safe-themes (quote ("1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
- '(exec-path (quote ("/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/bin" "/Applications/Emacs.app/Contents/MacOS/bin" "/usr/local/msp430/bin" "/usr/local/arm/gcc-arm-none-eabi-4_7-2013q1/bin")))
+ '(exec-path (quote ("/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/bin" "/opt/local/bin" "/Applications/Emacs.app/Contents/MacOS/bin" "/usr/local/arm/gcc-arm-none-eabi-4_7-2013q3/bin")))
  '(gud-gdb-command-name "arm-none-eabi-gdb -i=mi")
  '(inhibit-startup-screen t)
  '(large-file-warning-threshold nil)
@@ -48,6 +56,13 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
+
+;; look for C++ headers
+(setq magic-mode-alist
+  (append (list  
+       '("\\(.\\|\n\\)*\n[ ]*class" . c++-mode)
+       '("\\(.\\|\n\\)*\n[ ]*namespace" . c++-mode))
+      magic-mode-alist))
 
 ;; By an unknown contributor
 (require 'whitespace)
@@ -107,7 +122,6 @@ the checking happens for all pairs in auto-minor-mode-alist"
     (ding)))
 (setq ring-bell-function 'my-bell-function)
 
-(tool-bar-mode 0)
 (load-theme 'solarized-dark t)
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
