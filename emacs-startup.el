@@ -78,11 +78,13 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
       magic-mode-alist))
 
 
-;; (require 'helm-config)
+;;(require 'helm-config)
 
 ;;(global-set-key (kbd "C-:") 'ac-complete-with-helm)
-;; (define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
+;;(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
+;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
 
+;;(require 'helm-match-plugin)
 
 ;; By an unknown contributor
 (require 'whitespace)
