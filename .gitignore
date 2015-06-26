@@ -1,4 +1,5 @@
+url/cookies
 auto-save-list/
-elpa/archives/
+elpa/*
 *.elc
 *~
