@@ -5,7 +5,7 @@
 
 (setq default-tab-width 4)
 (setq-default indent-tabs-mode nil)
-(add-to-list 'load-path "/Volumes/Users/andy/.emacs.d")
+(add-to-list 'load-path (concat user-init-file ".d/lisp"))
 (add-to-list 'load-path "/Volumes/Users/andy/code/git-emacs")
 (require 'git)
 (require 'git-blame)
@@ -38,7 +38,7 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
   (set-exec-path-from-shell-PATH))
 
 ;; Junk for Python
-(load-file "~/.emacs.d/highlight-indentation.elc")
+(require 'highlight-indentation)
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/elpa/color-theme-solarized-20121209.1204")
 
@@ -164,3 +164,5 @@ the checking happens for all pairs in auto-minor-mode-alist"
     (occur (if isearch-regexp isearch-string (regexp-quote isearch-string)))))
 
 (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
+
+(global-set-key (kbd "C-x g") 'magit-status)
