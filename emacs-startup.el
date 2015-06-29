@@ -51,7 +51,8 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
  '(custom-enabled-themes (quote (solarized-dark)))
  '(custom-safe-themes (quote ("1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
 
- '(exec-path (quote ("/usr/bin"
+ '(exec-path (quote ("/opt/local/bin"
+                     "/usr/bin"
                      "/bin"
                      "/usr/sbin"
                      "/sbin"
@@ -125,6 +126,10 @@ the checking happens for all pairs in auto-minor-mode-alist"
         (setq alist (cdr alist))))))
 
 (add-hook 'find-file-hook 'enable-minor-mode-based-on-extension)
+
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode) (ggtags-mode 1))))
 
 (setq fci-rule-color "darkblue")
 (setq-default fci-rule-column 80)
