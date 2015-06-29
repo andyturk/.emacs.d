@@ -174,3 +174,4 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
 
 (global-set-key (kbd "C-x g") 'magit-status)
+(setq magit-last-seen-setup-instructions "1.4.0")
