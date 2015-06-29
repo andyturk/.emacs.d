@@ -32,7 +32,7 @@ degraded color mode to test the approximate color values for accuracy."
   :type 'boolean
   :group 'solarized)
 
-(defcustom solarized-contrast 'normal
+(defcustom solarized-contrast 'high
   "Stick with normal! It's been carefully tested. Setting this option to high or
 low does use the same Solarized palette but simply shifts some values up or
 down in order to expand or compress the tonal range displayed."
