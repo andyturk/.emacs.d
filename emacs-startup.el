@@ -40,25 +40,19 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 ;; Junk for Python
 (require 'highlight-indentation)
 
-(add-to-list 'custom-theme-load-path "~/.emacs.d/elpa/color-theme-solarized-20121209.1204")
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (solarized-dark)))
- '(custom-safe-themes (quote ("1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
-
- '(exec-path (quote ("/opt/local/bin"
-                     "/usr/bin"
-                     "/bin"
-                     "/usr/sbin"
-                     "/sbin"
-                     "/usr/local/bin"
-                     "/Applications/Emacs.app/Contents/MacOS/bin"
-                     "/usr/local/arm/gcc-arm-none-eabi-4_7-2013q3/bin")))
- '(gud-gdb-command-name "arm-none-eabi-gdb -i=mi")
+ '(custom-safe-themes
+   (quote
+    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "26614652a4b3515b4bbbb9828d71e206cc249b67c9142c06239ed3418eff95e2" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
+ '(exec-path
+   (quote
+    ("/opt/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/bin" "/Applications/Emacs.app/Contents/MacOS/bin")))
+ '(gud-gdb-command-name "/usr/local/arm/gcc-arm-none-eabi-4_9-2015q1/bin/arm-none-eabi-gdb -i=mi build/tiva.elf")
  '(inhibit-startup-screen t)
  '(large-file-warning-threshold nil)
  '(scroll-bar-mode nil))
@@ -152,6 +146,10 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (setq ring-bell-function 'my-bell-function)
 
 (load-theme 'solarized-dark t)
+
+(setq sml/theme 'dark)
+(sml/setup)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
