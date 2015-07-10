@@ -6,6 +6,7 @@
 (setq default-tab-width 4)
 (setq-default indent-tabs-mode nil)
 (add-to-list 'load-path (concat user-init-file ".d/lisp"))
+(add-to-list 'load-path (concat user-init-file ".d/helm"))
 (add-to-list 'load-path "/Volumes/Users/andy/code/git-emacs")
 (require 'git)
 (require 'git-blame)
@@ -171,3 +172,4 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
 
 (global-set-key (kbd "C-x g") 'magit-status)
+(setq magit-last-seen-setup-instructions "1.4.0")
