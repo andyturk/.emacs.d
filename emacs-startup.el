@@ -41,51 +41,20 @@ This is particularly useful under Mac OSX, where GUI apps are not started from a
 ;; Junk for Python
 (require 'highlight-indentation)
 
-;;(add-to-list 'custom-theme-load-path  "~/.emacs.d/elpa/solarized-theme-20150706.1028")
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#eee8d5" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#839496"])
- '(compilation-message-face (quote default))
- '(cua-global-mark-cursor-color "#2aa198")
- '(cua-normal-cursor-color "#657b83")
- '(cua-overwrite-cursor-color "#b58900")
- '(cua-read-only-cursor-color "#859900")
- '(custom-enabled-themes (quote (smart-mode-line-dark)))
+ '(custom-enabled-themes (quote (solarized-dark)))
  '(custom-safe-themes
    (quote
-    ("26614652a4b3515b4bbbb9828d71e206cc249b67c9142c06239ed3418eff95e2" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
+    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "26614652a4b3515b4bbbb9828d71e206cc249b67c9142c06239ed3418eff95e2" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" default)))
  '(exec-path
    (quote
     ("/opt/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/bin" "/Applications/Emacs.app/Contents/MacOS/bin")))
- '(fci-rule-color "#eee8d5")
- '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
- '(highlight-symbol-colors
-   (--map
-    (solarized-color-blend it "#fdf6e3" 0.25)
-    (quote
-     ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
- '(highlight-symbol-foreground-color "#586e75")
- '(highlight-tail-colors
-   (quote
-    (("#eee8d5" . 0)
-     ("#B4C342" . 20)
-     ("#69CABF" . 30)
-     ("#69B7F0" . 50)
-     ("#DEB542" . 60)
-     ("#F2804F" . 70)
-     ("#F771AC" . 85)
-     ("#eee8d5" . 100))))
- '(hl-bg-colors
-   (quote
-    ("#DEB542" "#F2804F" "#FF6E64" "#F771AC" "#9EA0E5" "#69B7F0" "#69CABF" "#B4C342")))
- '(hl-fg-colors
-   (quote
-    ("#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3")))
+ '(gud-gdb-command-name "/usr/local/arm/gcc-arm-none-eabi-4_9-2015q1/bin/arm-none-eabi-gdb -i=mi build/tiva.elf")
+
  '(inhibit-startup-screen t)
  '(large-file-warning-threshold nil)
  '(magit-diff-use-overlays nil)
@@ -211,6 +180,9 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (setq ring-bell-function 'my-bell-function)
 
 (load-theme 'solarized-dark t)
+
+(setq sml/theme 'dark)
+(sml/setup)
 
 (require 'ecb)
 ;;(require 'ecb-autoloads)
