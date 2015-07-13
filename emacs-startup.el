@@ -188,9 +188,9 @@ the checking happens for all pairs in auto-minor-mode-alist"
 ;;(require 'ecb-autoloads)
 (setq ecb-compile-window-height 12)
 
-(require 'clang-format)
-(global-set-key (kbd "C-c f |") 'clang-format-region)
-(global-set-key (kbd "C-c f b") 'clang-format-buffer)
+(when (require 'clang-format nil 'noerror)
+  (global-set-key (kbd "C-c f |") 'clang-format-region)
+  (global-set-key (kbd "C-c f b") 'clang-format-buffer))
 
 ;; Alex Schroeder [http://www.emacswiki.org/cgi-bin/wiki/OccurBuffer]
 (defun isearch-occur ()
