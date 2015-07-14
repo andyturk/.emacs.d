@@ -212,3 +212,7 @@ the checking happens for all pairs in auto-minor-mode-alist"
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(require 'key-chord)
+(key-chord-mode 1)
+(key-chord-define-global "FF" 'clang-format)
