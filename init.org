@@ -240,4 +240,19 @@ the checking happens for all pairs in auto-minor-mode-alist"
 ;;(global-set-key (kbd "C-:") 'ac-complete-with-helm)
 ;;(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
 ;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
+
+(require 'cl) ;; for lexical-let
+(defun ignore-error-wrapper (fn)
+  "Funtion return new function that ignore errors.
+   The function wraps a function with `ignore-errors' macro."
+  (lexical-let ((fn fn))
+    (lambda ()
+      (interactive)
+      (ignore-errors
+        (funcall fn)))))
+
+(global-set-key [s-left] (ignore-error-wrapper 'windmove-left))
+(global-set-key [s-right] (ignore-error-wrapper 'windmove-right))
+(global-set-key [s-up] (ignore-error-wrapper 'windmove-up))
+(global-set-key [s-down] (ignore-error-wrapper 'windmove-down))
 #+END_SRC
