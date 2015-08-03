@@ -1,0 +1,238 @@
+* Emacs Setup
+** Customization
+Try to save customized values somewhere other than in the main init file
+#+BEGIN_SRC emacs-lisp
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file)
+#+END_SRC
+
+** Package Management
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+(package-initialize)
+(setq package-archives
+ '(("ELPA"      . "http://tromey.com/elpa/")
+   ("gnu"       . "http://elpa.gnu.org/packages/")
+   ("melpa"     . "http://melpa.milkbox.net/packages/")
+   ("marmalade" . "http://marmalade-repo.org/packages")))
+#+END_SRC
+** Load Paths
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path (concat user-init-file ".d/lisp"))
+(add-to-list 'load-path (concat user-init-file ".d/helm"))
+#+END_SRC
+
+* OS Specific
+** OS X
+#+BEGIN_SRC emacs-lisp
+(cond ((string-equal system-type "darwin")
+       (defun set-exec-path-from-shell-PATH ()
+         "Set up Emacs' `exec-path' and PATH environment variable to match that used by the user's shell.
+
+This is particularly useful under Mac OSX, where GUI apps are not started from a shell."
+         (interactive)
+         (let ((path-from-shell (replace-regexp-in-string "[ \t\n]*$" "" (shell-command-to-string "$SHELL --login -i -c 'echo $PATH'"))))
+           (setenv "PATH" path-from-shell)
+           (setq exec-path (split-string path-from-shell path-separator))))
+
+       (when (memq window-system '(mac ns))
+         (set-exec-path-from-shell-PATH))
+
+       (set-terminal-coding-system 'utf-8)
+       (set-keyboard-coding-system 'utf-8)
+       (prefer-coding-system 'utf-8)
+       (message "noticed you're running OS X!")
+       )
+      )
+#+END_SRC
+* GUI Setup
+** Windowing
+#+BEGIN_SRC emacs-lisp
+(setq inhibit-splash-screen t)
+(tool-bar-mode -1)
+;;(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(setq split-height-threshold nil)
+#+END_SRC
+** Tweaks
+#+BEGIN_SRC emacs-lisp
+(defalias 'yes-or-no-p 'y-or-n-p)
+(put 'narrow-to-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+(setq truncate-partial-width-windows nil)
+#+END_SRC
+** Colors
+#+BEGIN_SRC emacs-lisp
+(load-theme 'solarized-dark t)
+(setq sml/theme 'dark)
+(sml/setup)
+#+END_SRC
+** Visual Bell
+#+BEGIN_SRC emacs-lisp
+(defun my-bell-function ()
+  (unless (memq this-command
+    	'(isearch-abort abort-recursive-edit exit-minibuffer
+              keyboard-quit mwheel-scroll down up next-line previous-line
+              backward-char forward-char))
+    (ding)))
+(setq ring-bell-function 'my-bell-function)
+#+END_SRC
+
+* File/mode association
+#+BEGIN_SRC emacs-lisp
+(defvar auto-minor-mode-alist
+  '(;;("\\.c\\'"  . fci-mode)
+    ;;("\\.cc\\'" . fci-mode)
+    ;;("\\.h\\'"  . fci-mode)
+
+    ("\\.c\\'"  . whitespace-mode)
+    ("\\.cc\\'" . whitespace-mode)
+    ("\\.c\\'"  . whitespace-mode))
+  "Alist of filename patterns vs correpsonding minor mode functions, see `auto-mode-alist'
+All elements of this alist are checked, meaning you can enable multiple minor modes for the same regexp.")
+
+(setq auto-mode-alist
+  (append (mapcar 'purecopy
+      '(("\\.c$"		 . c-mode)
+        ("\\.h$"		 . c-mode)
+        ("\\.a$"		 . c-mode)
+        ("\\.w$"		 . cweb-mode)
+        ("\\.cc$"		 . c++-mode)
+        ("\\.cpp$"		 . c++-mode)
+        ("\\.hpp$"		 . c++-mode)
+        ("\\.S$"		 . asm-mode)
+        ("\\.s$"		 . asm-mode)
+        ("\\.tex$"		 . LaTeX-mode)
+        ("\\.txi$"		 . Texinfo-mode)
+        ("\\.el$"		 . emacs-lisp-mode)
+        ("emacs"		 . emacs-lisp-mode)
+        ("[mM]akefile"		 . makefile-mode)
+        ("[mM]akefile.*"	 . makefile-mode)
+        ("\\.mk"		 . makefile-mode)
+        ("\\.cshrc"		 . sh-mode)
+        ("\\.html$"		 . html-mode)
+        ("\\.org$"		 . org-mode))) auto-mode-alist))
+
+(defun enable-minor-mode-based-on-extension ()
+  "check file name against auto-minor-mode-alist to enable minor modes
+the checking happens for all pairs in auto-minor-mode-alist"
+  (when buffer-file-name
+    (let ((name buffer-file-name)
+          (remote-id (file-remote-p buffer-file-name))
+          (alist auto-minor-mode-alist))
+      ;; Remove backup-suffixes from file name.
+      (setq name (file-name-sans-versions name))
+      ;; Remove remote file name identification.
+      (when (and (stringp remote-id)
+                 (string-match-p (regexp-quote remote-id) name))
+        (setq name (substring name (match-end 0))))
+      (while (and alist (caar alist) (cdar alist))
+        (if (string-match (caar alist) name)
+            (funcall (cdar alist) 1))
+        (setq alist (cdr alist))))))
+
+(add-hook 'find-file-hook 'enable-minor-mode-based-on-extension)
+
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode) (ggtags-mode 1))))
+
+#+END_SRC
+* Language Support
+** Python
+#+BEGIN_SRC emacs-lisp
+(require 'highlight-indentation)
+#+END_SRC
+** C++
+#+BEGIN_SRC emacs-lisp
+;; look for C++ headers
+(setq magic-mode-alist
+  (append (list  
+       '("\\(.\\|\n\\)*\n[ ]*class" . c++-mode)
+       '("\\(.\\|\n\\)*\n[ ]*namespace" . c++-mode))
+      magic-mode-alist))
+#+END_SRC
+
+* Non-standard Features
+** Git
+#+BEGIN_SRC emacs-lisp
+(setq magit-last-seen-setup-instructions "1.4.0")
+#+END_SRC
+** Fill Column
+#+BEGIN_SRC emacs-lisp
+(require 'fill-column-indicator)
+;;(setq fci-rule-color "darkblue")
+;;(setq-default fci-rule-column 80)
+;;(setq fill-column 80)
+#+END_SRC
+** Whitespace and Tabs
+#+BEGIN_SRC emacs-lisp
+(require 'whitespace)
+(setq whitespace-style '(face empty lines-tail trailing))
+
+(setq default-tab-width 4)
+(setq-default indent-tabs-mode nil)
+#+END_SRC
+
+** Parenthesis Matching
+#+BEGIN_SRC emacs-lisp
+(defun match-paren (arg)
+  "Go to the matching paren if on a paren; otherwise insert %."
+  (interactive "p")
+  (cond ((looking-at "\\s\(") (forward-list 1) (backward-char 1))
+        ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
+        (t (self-insert-command (or arg 1)))))
+
+(global-set-key "%" 'match-paren)
+#+END_SRC
+** Helm
+#+BEGIN_SRC emacs-lisp
+(require 'helm)
+;;(require 'helm-config)
+;;(require 'helm-match-plugin)
+#+END_SRC
+
+** Occur Mode
+#+BEGIN_SRC emacs-lisp
+;; Alex Schroeder [http://www.emacswiki.org/cgi-bin/wiki/OccurBuffer]
+(defun isearch-occur ()
+  "*Invoke `occur' from within isearch."
+  (interactive)
+  (let ((case-fold-search isearch-case-fold-search))
+    (occur (if isearch-regexp isearch-string (regexp-quote isearch-string)))))
+#+END_SRC
+
+** ECB
+#+BEGIN_SRC ignore-emacs-lisp
+(require 'ecb)
+;;(require 'ecb-autoloads)
+(setq ecb-compile-window-height 12)
+#+END_SRC
+
+** Reload Init File
+#+BEGIN_SRC emacs-lisp
+(defun reload-init-file ()
+  "Reload Emacs initialization without quitting."
+  (interactive)
+  (org-babel-load-file "~/.emacs.d/init.org")
+)
+#+END_SRC
+* Keyboard Bindings
+** Key Chords
+#+BEGIN_SRC emacs-lisp
+(require 'key-chord)
+(key-chord-mode 1)
+(key-chord-define-global "FF" 'clang-format)
+#+END_SRC
+** Bindings
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x g") 'magit-status)
+(define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
+(when (require 'clang-format nil 'noerror)
+  (global-set-key (kbd "C-c f |") 'clang-format-region)
+  (global-set-key (kbd "C-c f b") 'clang-format-buffer))
+
+;;(global-set-key (kbd "C-:") 'ac-complete-with-helm)
+;;(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
+;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
+#+END_SRC
