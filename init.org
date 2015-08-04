@@ -172,6 +172,7 @@ the checking happens for all pairs in auto-minor-mode-alist"
 <<<<<<< HEAD
 * Org Mode Setup
 #+BEGIN_SRC emacs-lisp
+  (setq org-startup-indented t)
   (setq org-directory akt/icloud-directory)
   (setq org-default-notes-file (akt/icloud-path "org-capture.org"))
   (setq org-refile-targets (list (cons (akt/icloud-path "avegant.org") '(:maxlevel . 2))
