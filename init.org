@@ -298,13 +298,18 @@ the checking happens for all pairs in auto-minor-mode-alist"
 #+END_SRC
 ** Org Mode
 #+BEGIN_SRC emacs-lisp
-(define-key global-map (kbd "C-c o c") 'org-capture)
+  (define-key global-map (kbd "C-c o c") 'org-capture)
 
-(defun akt/visit-org-captures ()
- (interactive)
- (find-file org-default-notes-file)
-)
-(define-key global-map (kbd "C-c o C") 'akt/visit-org-captures)
+  (defun akt/visit-org-captures ()
+   (interactive)
+   (find-file org-default-notes-file))
+
+  (defun akt/visit-default-org ()
+    (interactive)
+    (find-file (akt/icloud-path "avegant.org")))
+
+  (define-key global-map (kbd "C-c o C") 'akt/visit-org-captures)
+  (define-key global-map (kbd "C-c o <RET>") 'akt/visit-default-org)
 #+END_SRC
 ** Other
 #+BEGIN_SRC emacs-lisp
