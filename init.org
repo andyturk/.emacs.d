@@ -28,6 +28,17 @@ Try to save customized values somewhere other than in the main init file
 
 * OS Specific
 ** OS X
+*** iCloud stuff
+#+BEGIN_SRC emacs-lisp
+(defvar akt/icloud-directory
+ "~/Library/Mobile Documents/com~apple~CloudDocs"
+ "A directory that get sync'd to iCloud"
+)
+(defun akt/icloud-path (name)
+ (concat akt/icloud-directory "/" name)
+)
+#+END_SRC
+*** other
 #+BEGIN_SRC emacs-lisp
   (cond
    ((string-equal system-type "darwin")
@@ -158,6 +169,10 @@ the checking happens for all pairs in auto-minor-mode-alist"
       magic-mode-alist))
 #+END_SRC
 
+* Org Mode Setup
+#+BEGIN_SRC emacs-lisp
+(setq org-default-notes-file (akt/icloud-path "org-capture.org"))
+#+END_SRC
 * Non-standard Features
 ** Git
 #+BEGIN_SRC emacs-lisp
@@ -229,7 +244,17 @@ the checking happens for all pairs in auto-minor-mode-alist"
 (key-chord-mode 1)
 (key-chord-define-global "FF" 'clang-format)
 #+END_SRC
-** Bindings
+** Org Mode
+#+BEGIN_SRC emacs-lisp
+(define-key global-map (kbd "C-c o c") 'org-capture)
+
+(defun akt/visit-org-captures ()
+ (interactive)
+ (find-file org-default-notes-file)
+)
+(define-key global-map (kbd "C-c o C") 'akt/visit-org-captures)
+#+END_SRC
+** Other
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "C-x g") 'magit-status)
 (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
