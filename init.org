@@ -158,6 +158,49 @@ the checking happens for all pairs in auto-minor-mode-alist"
       magic-mode-alist))
 #+END_SRC
 
+* Org Mode
+#+BEGIN_SRC emacs-lisp
+  (load-file "~/.emacs.d/lisp/org-secretary.el")
+
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "|" "DONE(d)" "CANCELLED(c)")
+          (sequence "TASK(f)" "|" "DONE(d)")
+          (sequence "MAYBE(m)" "|" "CANCELLED(c)")))
+
+  (setq org-todo-keyword-faces
+        '(("TODO" . (:foreground "DarkOrange1" :weight bold))
+          ("MAYBE" . (:foreground "sea green"))
+          ("DONE" . (:foreground "light sea green"))
+          ("CANCELLED" . (:foreground "forest green"))
+          ("TASK" . (:foreground "blue"))))
+
+  (setq org-todo-keyword-faces
+        '(("TODO" . (:foreground "DarkOrange1" :weight bold))
+          ("MAYBE" . (:foreground "sea green"))
+          ("DONE" . (:foreground "light sea green"))
+          ("CANCELLED" . (:foreground "forest green"))
+          ("TASK" . (:foreground "blue"))))
+
+  (setq org-sec-me "andyt")
+
+  (setq org-agenda-custom-commands
+        '(("h" "Work todos" tags-todo
+           "-personal-doat={.+}-dowith={.+}/!-TASK"
+           ((org-agenda-todo-ignore-scheduled t)))
+          ("H" "All work todos" tags-todo "-personal/!-TASK-MAYBE"
+           ((org-agenda-todo-ignore-scheduled nil)))
+          ("A" "Work todos with doat or dowith" tags-todo
+           "-personal+doat={.+}|dowith={.+}/!-TASK"
+           ((org-agenda-todo-ignore-scheduled nil)))
+          ("j" "TODO dowith and TASK with"
+           ((org-sec-with-view "TODO dowith")
+            (org-sec-where-view "TODO doat")
+            (org-sec-assigned-with-view "TASK with")
+            (org-sec-stuck-with-view "STUCK with")))
+          ("J" "Interactive TODO dowith and TASK with"
+           ((org-sec-who-view "TODO dowith")))))
+
+#+END_SRC
 * Non-standard Features
 ** Git
 #+BEGIN_SRC emacs-lisp
@@ -240,4 +283,12 @@ the checking happens for all pairs in auto-minor-mode-alist"
 ;;(global-set-key (kbd "C-:") 'ac-complete-with-helm)
 ;;(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
 ;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
+
+
+(global-set-key "\C-cw" 'org-sec-set-with)
+(global-set-key "\C-cW" 'org-sec-set-where)
+(global-set-key "\C-cd" 'org-sec-set-dowith)
+(global-set-key "\C-cD" 'org-sec-set-doat)
+(global-set-key "\C-cj" 'org-sec-tag-entry)
+(global-set-key "\C-ca" 'org-agenda)
 #+END_SRC
