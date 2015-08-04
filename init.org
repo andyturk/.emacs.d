@@ -169,9 +169,51 @@ the checking happens for all pairs in auto-minor-mode-alist"
       magic-mode-alist))
 #+END_SRC
 
+<<<<<<< HEAD
 * Org Mode Setup
 #+BEGIN_SRC emacs-lisp
 (setq org-default-notes-file (akt/icloud-path "org-capture.org"))
+
+  (load-file "~/.emacs.d/lisp/org-secretary.el")
+
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "|" "DONE(d)" "CANCELLED(c)")
+          (sequence "TASK(f)" "|" "DONE(d)")
+          (sequence "MAYBE(m)" "|" "CANCELLED(c)")))
+
+  (setq org-todo-keyword-faces
+        '(("TODO" . (:foreground "DarkOrange1" :weight bold))
+          ("MAYBE" . (:foreground "sea green"))
+          ("DONE" . (:foreground "light sea green"))
+          ("CANCELLED" . (:foreground "forest green"))
+          ("TASK" . (:foreground "blue"))))
+
+  (setq org-todo-keyword-faces
+        '(("TODO" . (:foreground "DarkOrange1" :weight bold))
+          ("MAYBE" . (:foreground "sea green"))
+          ("DONE" . (:foreground "light sea green"))
+          ("CANCELLED" . (:foreground "forest green"))
+          ("TASK" . (:foreground "blue"))))
+
+  (setq org-sec-me "andyt")
+
+  (setq org-agenda-custom-commands
+        '(("h" "Work todos" tags-todo
+           "-personal-doat={.+}-dowith={.+}/!-TASK"
+           ((org-agenda-todo-ignore-scheduled t)))
+          ("H" "All work todos" tags-todo "-personal/!-TASK-MAYBE"
+           ((org-agenda-todo-ignore-scheduled nil)))
+          ("A" "Work todos with doat or dowith" tags-todo
+           "-personal+doat={.+}|dowith={.+}/!-TASK"
+           ((org-agenda-todo-ignore-scheduled nil)))
+          ("j" "TODO dowith and TASK with"
+           ((org-sec-with-view "TODO dowith")
+            (org-sec-where-view "TODO doat")
+            (org-sec-assigned-with-view "TASK with")
+            (org-sec-stuck-with-view "STUCK with")))
+          ("J" "Interactive TODO dowith and TASK with"
+           ((org-sec-who-view "TODO dowith")))))
+
 #+END_SRC
 * Non-standard Features
 ** Git
@@ -265,4 +307,27 @@ the checking happens for all pairs in auto-minor-mode-alist"
 ;;(global-set-key (kbd "C-:") 'ac-complete-with-helm)
 ;;(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
 ;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
+
+
+(global-set-key "\C-cw" 'org-sec-set-with)
+(global-set-key "\C-cW" 'org-sec-set-where)
+(global-set-key "\C-cd" 'org-sec-set-dowith)
+(global-set-key "\C-cD" 'org-sec-set-doat)
+(global-set-key "\C-cj" 'org-sec-tag-entry)
+(global-set-key "\C-ca" 'org-agenda)
+
+(require 'cl) ;; for lexical-let
+(defun ignore-error-wrapper (fn)
+  "Funtion return new function that ignore errors.
+   The function wraps a function with `ignore-errors' macro."
+  (lexical-let ((fn fn))
+    (lambda ()
+      (interactive)
+      (ignore-errors
+        (funcall fn)))))
+
+(global-set-key [s-left] (ignore-error-wrapper 'windmove-left))
+(global-set-key [s-right] (ignore-error-wrapper 'windmove-right))
+(global-set-key [s-up] (ignore-error-wrapper 'windmove-up))
+(global-set-key [s-down] (ignore-error-wrapper 'windmove-down))
 #+END_SRC
