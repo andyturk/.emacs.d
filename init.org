@@ -172,11 +172,18 @@ the checking happens for all pairs in auto-minor-mode-alist"
 <<<<<<< HEAD
 * Org Mode Setup
 #+BEGIN_SRC emacs-lisp
+  (setq akt/agenda-personal (akt/icloud-path "personal.org"))
+  (setq akt/agenda-avegant (akt/icloud-path "avegant.org"))
+
+  (setq org-agenda-files (list akt/agenda-personal akt/agenda-avegant))
+
+  (setq org-log-done t)
   (setq org-startup-indented t)
   (setq org-directory akt/icloud-directory)
+  (add-hook 'org-mode-hook (lambda () (auto-revert-mode 1)))
   (setq org-default-notes-file (akt/icloud-path "org-capture.org"))
-  (setq org-refile-targets (list (cons (akt/icloud-path "avegant.org") '(:maxlevel . 2))
-                                 (cons (akt/icloud-path "personal.org") '(:maxlevel . 2))))
+  (setq org-refile-targets (list (cons akt/agenda-avegant '(:maxlevel . 2))
+                                 (cons akt/agenda-personal '(:maxlevel . 2))))
 
   (load-file "~/.emacs.d/lisp/org-secretary.el")
 
