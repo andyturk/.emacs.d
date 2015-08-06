@@ -309,8 +309,8 @@ the checking happens for all pairs in auto-minor-mode-alist"
   (define-key global-map (kbd "C-c o c") 'org-capture)
 
   (defun akt/visit-org-captures ()
-   (interactive)
-   (find-file org-default-notes-file))
+    (interactive)
+    (find-file org-default-notes-file))
 
   (defun akt/visit-default-org ()
     (interactive)
@@ -318,6 +318,14 @@ the checking happens for all pairs in auto-minor-mode-alist"
 
   (define-key global-map (kbd "C-c o C") 'akt/visit-org-captures)
   (define-key global-map (kbd "C-c o <RET>") 'akt/visit-default-org)
+
+  (global-set-key (kbd "C-c w") 'org-sec-set-with)
+  (global-set-key (kbd "C-c W") 'org-sec-set-where)
+  (global-set-key (kbd "C-c d") 'org-sec-set-dowith)
+  (global-set-key (kbd "C-c D") 'org-sec-set-doat)
+  (global-set-key (kbd "C-c j") 'org-sec-tag-entry)
+  (global-set-key (kbd "C-c a") 'org-agenda)
+
 #+END_SRC
 ** Other
 #+BEGIN_SRC emacs-lisp
@@ -331,13 +339,6 @@ the checking happens for all pairs in auto-minor-mode-alist"
 ;;(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
 ;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
 
-
-(global-set-key "\C-cw" 'org-sec-set-with)
-(global-set-key "\C-cW" 'org-sec-set-where)
-(global-set-key "\C-cd" 'org-sec-set-dowith)
-(global-set-key "\C-cD" 'org-sec-set-doat)
-(global-set-key "\C-cj" 'org-sec-tag-entry)
-(global-set-key "\C-ca" 'org-agenda)
 
 (require 'cl) ;; for lexical-let
 (defun ignore-error-wrapper (fn)
