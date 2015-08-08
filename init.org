@@ -188,23 +188,18 @@ the checking happens for all pairs in auto-minor-mode-alist"
   (load-file "~/.emacs.d/lisp/org-secretary.el")
 
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "|" "DONE(d)" "CANCELLED(c)")
-          (sequence "TASK(f)" "|" "DONE(d)")
-          (sequence "MAYBE(m)" "|" "CANCELLED(c)")))
+        '((sequence "TODO(t)" "|" "DONE(d)" "CNCL(c)") ;; a thing I need to do
+          (sequence "NEXT(n)" "|" "DONE(d)" "CNCL(c)") ;; next thing to do in a project
+          (sequence "DELG(D)" "|" "DONE(d)")           ;; a thing someone else needs to do
+          (sequence "MAYB(m)" "|" "CNCL(c)")))         ;; not sure whether it needs to be done
 
   (setq org-todo-keyword-faces
-        '(("TODO" . (:foreground "DarkOrange1" :weight bold))
-          ("MAYBE" . (:foreground "sea green"))
+        '(("TODO" . (:foreground "Orange" :weight bold))
+          ("DELG" . (:foreground "Cyan"))
+          ("MAYB" . (:foreground "sea green"))
           ("DONE" . (:foreground "light sea green"))
-          ("CANCELLED" . (:foreground "forest green"))
-          ("TASK" . (:foreground "blue"))))
-
-  (setq org-todo-keyword-faces
-        '(("TODO" . (:foreground "DarkOrange1" :weight bold))
-          ("MAYBE" . (:foreground "sea green"))
-          ("DONE" . (:foreground "light sea green"))
-          ("CANCELLED" . (:foreground "forest green"))
-          ("TASK" . (:foreground "blue"))))
+          ("CNCL" . (:foreground "forest green"))
+          ("DELG" . (:foreground "blue"))))
 
   (setq org-sec-me "andyt")
 
@@ -212,24 +207,24 @@ the checking happens for all pairs in auto-minor-mode-alist"
         (quote (("t" "todo" entry (file org-default-notes-file)
                  "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
                 ("M" "meeting" entry (file org-default-notes-file)
-                 "* TODO Discuss %? :MEETING:\nSCHEDULED: %^{When?}T\n** Who\n   - [ ] %(eval 'org-sec-me)\n** Agenda\n   - [ ] item1\n   - [ ] item2\n** Discussion\n** Actions\n   - [ ] action1\n   - [ ] action2\n")
+                 "* TODO Discuss %? :MEET:\nSCHEDULED: %^{When?}T\n** Who\n   - [ ] %(eval 'org-sec-me)\n** Agenda\n   - [ ] item1\n   - [ ] item2\n** Discussion\n** Actions\n   - [ ] action1\n   - [ ] action2\n")
                 )))
 
   (setq org-agenda-custom-commands
         '(("h" "Work todos" tags-todo
-           "-personal-doat={.+}-dowith={.+}/!-TASK"
+           "-personal-doat={.+}-dowith={.+}/!-DELG"
            ((org-agenda-todo-ignore-scheduled t)))
-          ("H" "All work todos" tags-todo "-personal/!-TASK-MAYBE"
+          ("H" "All work todos" tags-todo "-personal/!-DELG-MAYB"
            ((org-agenda-todo-ignore-scheduled nil)))
           ("A" "Work todos with doat or dowith" tags-todo
-           "-personal+doat={.+}|dowith={.+}/!-TASK"
+           "-personal+doat={.+}|dowith={.+}/!-DELG"
            ((org-agenda-todo-ignore-scheduled nil)))
-          ("j" "TODO dowith and TASK with"
+          ("j" "TODO dowith and DELG with"
            ((org-sec-with-view "TODO dowith")
             (org-sec-where-view "TODO doat")
-            (org-sec-assigned-with-view "TASK with")
+            (org-sec-assigned-with-view "DELG with")
             (org-sec-stuck-with-view "STUCK with")))
-          ("J" "Interactive TODO dowith and TASK with"
+          ("J" "Interactive TODO dowith and DELG with"
            ((org-sec-who-view "TODO dowith")))))
 
 #+END_SRC
