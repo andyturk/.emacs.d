@@ -172,60 +172,60 @@ the checking happens for all pairs in auto-minor-mode-alist"
 <<<<<<< HEAD
 * Org Mode Setup
 #+BEGIN_SRC emacs-lisp
-  (setq akt/agenda-personal (akt/icloud-path "personal.org"))
-  (setq akt/agenda-avegant (akt/icloud-path "avegant.org"))
+    (setq akt/agenda-personal (akt/icloud-path "personal.org"))
+    (setq akt/agenda-avegant (akt/icloud-path "avegant.org"))
 
-  (setq org-agenda-files (list akt/agenda-personal akt/agenda-avegant))
+    (setq org-agenda-files (list akt/agenda-personal akt/agenda-avegant))
 
-  (setq org-log-done t)
-  (setq org-startup-indented t)
-  (setq org-directory akt/icloud-directory)
-  (add-hook 'org-mode-hook (lambda () (auto-revert-mode 1)))
-  (setq org-default-notes-file (akt/icloud-path "org-capture.org"))
-  (setq org-refile-targets (list (cons akt/agenda-avegant '(:maxlevel . 2))
-                                 (cons akt/agenda-personal '(:maxlevel . 2))))
+    (setq org-log-done t)
+    (setq org-startup-indented t)
+    (setq org-directory akt/icloud-directory)
+    (add-hook 'org-mode-hook (lambda () (auto-revert-mode 1)))
+    (setq org-default-notes-file (akt/icloud-path "org-capture.org"))
+    (setq org-refile-targets (list (cons akt/agenda-avegant '(:maxlevel . 2))
+                                   (cons akt/agenda-personal '(:maxlevel . 2))))
 
-  (load-file "~/.emacs.d/lisp/org-secretary.el")
+    (load-file "~/.emacs.d/lisp/org-secretary.el")
 
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "|" "DONE(d)" "CNCL(c)") ;; a thing I need to do
-          (sequence "NEXT(n)" "|" "DONE(d)" "CNCL(c)") ;; next thing to do in a project
-          (sequence "DELG(D)" "|" "DONE(d)")           ;; a thing someone else needs to do
-          (sequence "MAYB(m)" "|" "CNCL(c)")))         ;; not sure whether it needs to be done
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "|" "DONE(d)" "CNCL(c)") ;; a thing I need to do
+            (sequence "NEXT(n)" "|" "DONE(d)" "CNCL(c)") ;; next thing to do in a project
+            (sequence "DELG(D)" "|" "DONE(d)")           ;; a thing someone else needs to do
+            (sequence "MAYB(m)" "|" "CNCL(c)")))         ;; not sure whether it needs to be done
 
-  (setq org-todo-keyword-faces
-        '(("TODO" . (:foreground "Orange" :weight bold))
-          ("DELG" . (:foreground "Cyan"))
-          ("MAYB" . (:foreground "sea green"))
-          ("DONE" . (:foreground "light sea green"))
-          ("CNCL" . (:foreground "forest green"))
-          ("DELG" . (:foreground "blue"))))
+    (setq org-todo-keyword-faces
+          '(("TODO" . (:foreground "Orange" :weight bold))
+            ("DELG" . (:foreground "Cyan"))
+            ("MAYB" . (:foreground "sea green"))
+            ("DONE" . (:foreground "light sea green"))
+            ("CNCL" . (:foreground "forest green"))
+            ("DELG" . (:foreground "blue"))))
 
-  (setq org-sec-me "andyt")
+    (setq org-sec-me "andyt")
 
-  (setq org-capture-templates
-        (quote (("t" "todo" entry (file org-default-notes-file)
-                 "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
-                ("M" "meeting" entry (file org-default-notes-file)
-                 "* TODO Discuss %? :MEET:\nSCHEDULED: %^{When?}T\n** Who\n   - [ ] %(eval 'org-sec-me)\n** Agenda\n   - [ ] item1\n   - [ ] item2\n** Discussion\n** Actions\n   - [ ] action1\n   - [ ] action2\n")
-                )))
+    (setq org-capture-templates
+          (quote (("t" "todo" entry (file org-default-notes-file)
+                   "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
+                  ("M" "meeting" entry (file org-default-notes-file)
+                   "* TODO Discuss %? :MEET:\nSCHEDULED: %^{When?}T\n** Who\n   - [ ] %(eval 'org-sec-me)\n** Agenda\n   - [ ] item1\n   - [ ] item2\n** Discussion\n** Actions\n   - [ ] action1\n   - [ ] action2\n")
+                  )))
 
-  (setq org-agenda-custom-commands
-        '(("h" "Work todos" tags-todo
-           "-personal-doat={.+}-dowith={.+}/!-DELG"
-           ((org-agenda-todo-ignore-scheduled t)))
-          ("H" "All work todos" tags-todo "-personal/!-DELG-MAYB"
-           ((org-agenda-todo-ignore-scheduled nil)))
-          ("A" "Work todos with doat or dowith" tags-todo
-           "-personal+doat={.+}|dowith={.+}/!-DELG"
-           ((org-agenda-todo-ignore-scheduled nil)))
-          ("j" "TODO dowith and DELG with"
-           ((org-sec-with-view "TODO dowith")
-            (org-sec-where-view "TODO doat")
-            (org-sec-assigned-with-view "DELG with")
-            (org-sec-stuck-with-view "STUCK with")))
-          ("J" "Interactive TODO dowith and DELG with"
-           ((org-sec-who-view "TODO dowith")))))
+    (setq org-agenda-custom-commands
+          '(("h" "Work todos" tags-todo
+             "-personal-doat={.+}-dowith={.+}/!-DELG"
+             ((org-agenda-todo-ignore-scheduled t)))
+            ("H" "All work todos" tags-todo "-personal/!-DELG-MAYB"
+             ((org-agenda-todo-ignore-scheduled nil)))
+            ("A" "Work todos with doat or dowith" tags-todo
+             "-personal+doat={.+}|dowith={.+}/!-DELG"
+             ((org-agenda-todo-ignore-scheduled nil)))
+            ("j" "TODO dowith and DELG with"
+             ((org-sec-with-view "TODO dowith")
+              (org-sec-where-view "TODO doat")
+              (org-sec-assigned-with-view "DELG with")
+              (org-sec-stuck-with-view "STUCK with")))
+            ("J" "Interactive TODO dowith and DELG with"
+             ((org-sec-who-view "TODO dowith")))))
 
 #+END_SRC
 * Non-standard Features
