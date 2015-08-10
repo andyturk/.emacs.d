@@ -210,22 +210,19 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 
     (setq org-todo-keywords
           '((sequence "TODO(t)" "|" "DONE(d)" "CNCL(c)")
-            (sequence "TASK(f)" "|" "DONE(d)")
             (sequence "MAYB(m)" "|" "CNCL(c)")))
 
     (setq org-todo-keyword-faces
           '(("TODO" . (:foreground "DarkOrange1" :weight bold))
             ("MAYB" . (:foreground "sea green"))
             ("DONE" . (:foreground "light sea green"))
-            ("CNCL" . (:foreground "forest green"))
-            ("TASK" . (:foreground "blue"))))
+            ("CNCL" . (:foreground "forest green")) ))
 
     (setq org-todo-keyword-faces
           '(("TODO" . (:foreground "DarkOrange1" :weight bold))
             ("MAYB" . (:foreground "sea green"))
             ("DONE" . (:foreground "light sea green"))
-            ("CNCL" . (:foreground "forest green"))
-            ("TASK" . (:foreground "blue"))))
+            ("CNCL" . (:foreground "forest green")) ))
 
     (setq org-sec-me "andyt")
 
