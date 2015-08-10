@@ -26,17 +26,30 @@ Try to save customized values somewhere other than in the main init file
 (add-to-list 'load-path (concat user-init-file ".d/helm"))
 #+END_SRC
 
+** General functions
+#+BEGIN_SRC emacs-lisp
+  (defun akt/touch-file (path)
+    "Create an empty file unless the specified path already exists."
+    (unless (file-exists-p path) (write-region "" "" path)))
+#+END_SRC 
+
 * OS Specific
+#+BEGIN_SRC emacs-lisp
+(setq akt/hostname system-name)
+#+END_SRC
 ** OS X
 *** iCloud stuff
 #+BEGIN_SRC emacs-lisp
+(eval-when-compile (require 'subr-x))
+
 (defvar akt/icloud-directory
  "~/Library/Mobile Documents/com~apple~CloudDocs"
- "A directory that get sync'd to iCloud"
-)
+ "A directory that get sync'd to iCloud")
+
 (defun akt/icloud-path (name)
- (concat akt/icloud-directory "/" name)
-)
+ (concat akt/icloud-directory "/" name))
+
+(setq akt/hostname (string-remove-suffix ".local" akt/hostname))
 #+END_SRC
 *** other
 #+BEGIN_SRC emacs-lisp
@@ -171,60 +184,99 @@ the checking happens for all pairs in auto-minor-mode-alist"
 
 <<<<<<< HEAD
 * Org Mode Setup
+Org mode data is saved within an iCloud directory so that it'll be replicated to all my machines.
 #+BEGIN_SRC emacs-lisp
-    (setq akt/agenda-personal (akt/icloud-path "personal.org"))
-    (setq akt/agenda-avegant (akt/icloud-path "avegant.org"))
+  (setq akt/agenda-personal (akt/icloud-path "personal.org"))
+  (setq akt/agenda-avegant (akt/icloud-path "avegant.org"))
+  (setq org-default-notes-file (akt/icloud-path (concat akt/hostname "-capture.org")))
 
-    (setq org-agenda-files (list akt/agenda-personal akt/agenda-avegant))
+  (akt/touch-file org-default-notes-file)
+#+END_SRC 
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-agenda-files (list
+                          org-default-notes-file
+                          akt/agenda-personal
+                          akt/agenda-avegant))
 
     (setq org-log-done t)
     (setq org-startup-indented t)
     (setq org-directory akt/icloud-directory)
     (add-hook 'org-mode-hook (lambda () (auto-revert-mode 1)))
-    (setq org-default-notes-file (akt/icloud-path "org-capture.org"))
     (setq org-refile-targets (list (cons akt/agenda-avegant '(:maxlevel . 2))
                                    (cons akt/agenda-personal '(:maxlevel . 2))))
 
-    (load-file "~/.emacs.d/lisp/org-secretary.el")
+  ;;  (load-file "~/.emacs.d/lisp/org-secretary.el")
 
     (setq org-todo-keywords
-          '((sequence "TODO(t)" "|" "DONE(d)" "CNCL(c)") ;; a thing I need to do
-            (sequence "NEXT(n)" "|" "DONE(d)" "CNCL(c)") ;; next thing to do in a project
-            (sequence "DELG(D)" "|" "DONE(d)")           ;; a thing someone else needs to do
-            (sequence "MAYB(m)" "|" "CNCL(c)")))         ;; not sure whether it needs to be done
+          '((sequence "TODO(t)" "|" "DONE(d)" "CNCL(c)")
+            (sequence "TASK(f)" "|" "DONE(d)")
+            (sequence "MAYB(m)" "|" "CNCL(c)")))
 
     (setq org-todo-keyword-faces
-          '(("TODO" . (:foreground "Orange" :weight bold))
-            ("DELG" . (:foreground "Cyan"))
+          '(("TODO" . (:foreground "DarkOrange1" :weight bold))
             ("MAYB" . (:foreground "sea green"))
             ("DONE" . (:foreground "light sea green"))
             ("CNCL" . (:foreground "forest green"))
-            ("DELG" . (:foreground "blue"))))
+            ("TASK" . (:foreground "blue"))))
+
+    (setq org-todo-keyword-faces
+          '(("TODO" . (:foreground "DarkOrange1" :weight bold))
+            ("MAYB" . (:foreground "sea green"))
+            ("DONE" . (:foreground "light sea green"))
+            ("CNCL" . (:foreground "forest green"))
+            ("TASK" . (:foreground "blue"))))
 
     (setq org-sec-me "andyt")
 
-    (setq org-capture-templates
-          (quote (("t" "todo" entry (file org-default-notes-file)
-                   "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
-                  ("M" "meeting" entry (file org-default-notes-file)
-                   "* TODO Discuss %? :MEET:\nSCHEDULED: %^{When?}T\n** Who\n   - [ ] %(eval 'org-sec-me)\n** Agenda\n   - [ ] item1\n   - [ ] item2\n** Discussion\n** Actions\n   - [ ] action1\n   - [ ] action2\n")
-                  )))
+  (setq akt/org-capture-meeting-template
+  "* TODO akt/Discuss %? :MEET:
+    SCHEDULED: %^{When?}T
+  ,** Who
+    - [ ] %(eval 'org-sec-me)
+  ,** Agenda
+    - [ ] item1\n   - [ ] item2
+  ,** Discussion
+  ,** Actions
+    - [ ] action1
+    - [ ] action2
+  "
+  )
+
+  (setq akt/org-capture-todo-template
+  "* TODO %?
+  %U
+  %a
+  "
+  )
+
+  (setq akt/org-capture-note-template
+  "* note: %?
+  "
+  )
+
+  (setq org-capture-templates
+        (list
+         (list "t" "todo" 'entry '(file org-default-notes-file) akt/org-capture-todo-template)
+         (list "m" "meeting" 'entry '(file org-default-notes-file) akt/org-capture-meeting-template)
+         (list "n" "note" 'entry '(file org-default-notes-file) akt/org-capture-note-template)
+         ))
 
     (setq org-agenda-custom-commands
           '(("h" "Work todos" tags-todo
-             "-personal-doat={.+}-dowith={.+}/!-DELG"
+             "-personal-doat={.+}-dowith={.+}/!-TASK"
              ((org-agenda-todo-ignore-scheduled t)))
-            ("H" "All work todos" tags-todo "-personal/!-DELG-MAYB"
+            ("H" "All work todos" tags-todo "-personal/!-TASK-MAYB"
              ((org-agenda-todo-ignore-scheduled nil)))
             ("A" "Work todos with doat or dowith" tags-todo
-             "-personal+doat={.+}|dowith={.+}/!-DELG"
+             "-personal+doat={.+}|dowith={.+}/!-TASK"
              ((org-agenda-todo-ignore-scheduled nil)))
-            ("j" "TODO dowith and DELG with"
+            ("j" "TODO dowith and TASK with"
              ((org-sec-with-view "TODO dowith")
               (org-sec-where-view "TODO doat")
-              (org-sec-assigned-with-view "DELG with")
+              (org-sec-assigned-with-view "TASK with")
               (org-sec-stuck-with-view "STUCK with")))
-            ("J" "Interactive TODO dowith and DELG with"
+            ("J" "Interactive TODO dowith and TASK with"
              ((org-sec-who-view "TODO dowith")))))
 
 #+END_SRC
@@ -301,7 +353,7 @@ the checking happens for all pairs in auto-minor-mode-alist"
 #+END_SRC
 ** Org Mode
 #+BEGIN_SRC emacs-lisp
-  (define-key global-map (kbd "C-c o c") 'org-capture)
+  (define-key global-map (kbd "C-c c") 'org-capture)
 
   (defun akt/visit-org-captures ()
     (interactive)
@@ -314,11 +366,6 @@ the checking happens for all pairs in auto-minor-mode-alist"
   (define-key global-map (kbd "C-c o C") 'akt/visit-org-captures)
   (define-key global-map (kbd "C-c o <RET>") 'akt/visit-default-org)
 
-  (global-set-key (kbd "C-c w") 'org-sec-set-with)
-  (global-set-key (kbd "C-c W") 'org-sec-set-where)
-  (global-set-key (kbd "C-c d") 'org-sec-set-dowith)
-  (global-set-key (kbd "C-c D") 'org-sec-set-doat)
-  (global-set-key (kbd "C-c j") 'org-sec-tag-entry)
   (global-set-key (kbd "C-c a") 'org-agenda)
 
 #+END_SRC
