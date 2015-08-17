@@ -332,7 +332,6 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 ;;(require 'ecb-autoloads)
 (setq ecb-compile-window-height 12)
 #+END_SRC
-
 ** Reload Init File
 #+BEGIN_SRC emacs-lisp
 (defun reload-init-file ()
@@ -341,6 +340,12 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
   (org-babel-load-file "~/.emacs.d/init.org")
 )
 #+END_SRC
+
+** Ido
+#+begin_src emacs-lisp
+(require 'ido)
+(ido-mode t)
+#+end_src
 * Keyboard Bindings
 ** Key Chords
 #+BEGIN_SRC emacs-lisp
