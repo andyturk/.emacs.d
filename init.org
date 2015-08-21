@@ -23,7 +23,7 @@ Try to save customized values somewhere other than in the main init file
 ** Load Paths
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path (concat user-init-file ".d/lisp"))
-(add-to-list 'load-path (concat user-init-file ".d/helm"))
+;;(add-to-list 'load-path (concat user-init-file ".d/helm"))
 #+END_SRC
 
 ** General functions
@@ -311,7 +311,7 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 #+END_SRC
 ** Helm
 #+BEGIN_SRC emacs-lisp
-(require 'helm)
+;;(require 'helm)
 ;;(require 'helm-config)
 ;;(require 'helm-match-plugin)
 #+END_SRC
