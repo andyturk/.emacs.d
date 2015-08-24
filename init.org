@@ -107,7 +107,7 @@ Try to save customized values somewhere other than in the main init file
 (setq ring-bell-function 'my-bell-function)
 #+END_SRC
 ** Git Gutter Fringe
-#+begin_src emacs-lisp
+#+begin_src ignored-emacs-lisp
   (if window-system
       (progn
         (require 'git-gutter-fringe)
@@ -233,8 +233,30 @@ the checking happens for all pairs in auto-minor-mode-alist"
        '("\\(.\\|\n\\)*\n[ ]*namespace" . c++-mode))
       magic-mode-alist))
 #+END_SRC
+** Compilation
+#+begin_src ignored-emacs-lisp
+      (defun akt/compile ()
+        "Execute compile and resize the window"
+        (interactive)
+        (progn ()
+               (call-interactively 'compile)
+               (setq cur (selected-window))
+               (setq w (get-buffer-window "*compilation*"))
+               (select-window w)
+               (set-window-dedicated-p (selected-window) 1)
+               (setq h (window-height w))
+               (shrink-window (- h 10))
+               (select-window cur)))
 
-<<<<<<< HEAD
+      (defun akt/compilation-mode-hook ()
+        "Make sure the compile window splits vertically"
+        (progn ()
+               (if (not (get-buffer-window "*compilation*"))
+                   (split-window-vertically))))
+
+      (add-hook 'compilation-mode-hook 'akt/compilation-mode-hook)
+
+#+end_src
 * Org Mode Setup
 Org mode data is saved within an iCloud directory so that it'll be replicated to all my machines.
 #+BEGIN_SRC emacs-lisp
@@ -400,11 +422,15 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 (require 'ido)
 (ido-mode t)
 #+end_src
-
 ** smex
 #+begin_src emacs-lisp
 (require 'smex)
 (smex-initialize)
+#+end_src
+** popwin
+#+begin_src emacs-lisp
+(require 'popwin)
+(popwin-mode t)
 #+end_src
 * Keyboard Bindings
 ** Key Chords
@@ -412,6 +438,8 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 (require 'key-chord)
 (key-chord-mode 1)
 (key-chord-define-global "FF" 'clang-format)
+(key-chord-define-global "nm" 'neotree-toggle)
+(key-chord-define-global "cm" 'akt/compile)
 #+END_SRC
 ** Org Mode
 #+BEGIN_SRC emacs-lisp
