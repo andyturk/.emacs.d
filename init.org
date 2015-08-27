@@ -432,6 +432,35 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 (require 'popwin)
 (popwin-mode t)
 #+end_src
+** neotree
+#+begin_src emacs-lisp
+  (require 'neotree)
+  (defun akt/eshell-here (dir)
+    "Go to eshell and set current directory to the specified path"
+    (interactive)
+    (eshell)
+    ;;(eshell/pushd ".")
+    (cd dir)
+    (goto-char (point-max))
+    (eshell-kill-input)
+    (eshell-send-input))
+
+  (defun akt/eshell-at-neotree-dir (path _)
+    "Launch eshell window at current directory within neotree."
+    (interactive)
+    (akt/eshell-here path))
+
+  (defun akt/eshell-at-neotree-file (path _)
+    "Launch eshell window at current directory within neotree."
+    (interactive)
+    (akt/eshell-here (file-name-directory path)))
+
+  (define-key neotree-mode-map (kbd "!") (neotree-make-executor
+                                          :dir-fn 'akt/eshell-at-neotree-dir
+                                          :file-fn 'akt/eshell-at-neotree-file))
+
+  ;;(push '(eshell-mode :position top :height 20) popwin:special-display-config)
+#+end_src
 * Keyboard Bindings
 ** Key Chords
 #+BEGIN_SRC emacs-lisp
