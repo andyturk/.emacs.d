@@ -234,6 +234,10 @@ the checking happens for all pairs in auto-minor-mode-alist"
       magic-mode-alist))
 #+END_SRC
 ** Compilation
+#+begin_src emacs-lisp
+(setq compilation-scroll-output 'first-error)
+#+end_src
+
 #+begin_src ignored-emacs-lisp
       (defun akt/compile ()
         "Execute compile and resize the window"
@@ -468,7 +472,7 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 (key-chord-mode 1)
 (key-chord-define-global "FF" 'clang-format)
 (key-chord-define-global "nm" 'neotree-toggle)
-(key-chord-define-global "cm" 'akt/compile)
+(key-chord-define-global "cm" 'compile)
 #+END_SRC
 ** Org Mode
 #+BEGIN_SRC emacs-lisp
