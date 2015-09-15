@@ -519,33 +519,34 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 #+END_SRC
 ** Other
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x g") 'magit-status)
-(define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
-(when (require 'clang-format nil 'noerror)
-  (global-set-key (kbd "C-c f |") 'clang-format-region)
-  (global-set-key (kbd "C-c f b") 'clang-format-buffer))
+  (global-set-key (kbd "C-x g") 'magit-status)
+  (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
+  (when (require 'clang-format nil 'noerror)
+    (global-set-key (kbd "C-c f |") 'clang-format-region)
+    (global-set-key (kbd "C-c f b") 'clang-format-buffer))
 
-;;(global-set-key (kbd "C-:") 'ac-complete-with-helm)
-;;(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
-;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
+  ;;(global-set-key (kbd "C-:") 'ac-complete-with-helm)
+  ;;(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
+  ;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
 
 
-(require 'cl) ;; for lexical-let
-(defun ignore-error-wrapper (fn)
-  "Funtion return new function that ignore errors.
-   The function wraps a function with `ignore-errors' macro."
-  (lexical-let ((fn fn))
-    (lambda ()
-      (interactive)
-      (ignore-errors
-        (funcall fn)))))
+  (require 'cl) ;; for lexical-let
+  (defun ignore-error-wrapper (fn)
+    "Funtion return new function that ignore errors.
+     The function wraps a function with `ignore-errors' macro."
+    (lexical-let ((fn fn))
+      (lambda ()
+        (interactive)
+        (ignore-errors
+          (funcall fn)))))
 
-(global-set-key [s-left] (ignore-error-wrapper 'windmove-left))
-(global-set-key [s-right] (ignore-error-wrapper 'windmove-right))
-(global-set-key [s-up] (ignore-error-wrapper 'windmove-up))
-(global-set-key [s-down] (ignore-error-wrapper 'windmove-down))
+  (global-set-key [s-left] (ignore-error-wrapper 'windmove-left))
+  (global-set-key [s-right] (ignore-error-wrapper 'windmove-right))
+  (global-set-key [s-up] (ignore-error-wrapper 'windmove-up))
+  (global-set-key [s-down] (ignore-error-wrapper 'windmove-down))
 
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+  (global-set-key (kbd "M-x") 'smex)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+  (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+  (global-set-key (kbd "C-=") 'er/expand-region)
 #+END_SRC
