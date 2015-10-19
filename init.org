@@ -460,6 +460,10 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 
   (define-key isearch-mode-map (kbd "<backspace>") 'isearch-delete-something)
 #+end_src
+** clang-format
+#+begin_src emacs-lisp
+(load-library "clang-format")
+#+end_src
 ** neotree
 #+begin_src emacs-lisp
   (require 'neotree)
@@ -488,6 +492,14 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
                                           :file-fn 'akt/eshell-at-neotree-file))
 
   ;;(push '(eshell-mode :position top :height 20) popwin:special-display-config)
+#+end_src
+** mouse commands
+#+begin_src emacs-lisp
+  (defun akt/delete-window-under-mouse (EVENT)
+    "Deletes the window under the mouse."
+    (interactive "e")
+    (mouse-set-point EVENT)
+    (delete-window))
 #+end_src
 * Keyboard Bindings
 ** Key Chords
@@ -519,34 +531,103 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 #+END_SRC
 ** Other
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x g") 'magit-status)
-  (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
-  (when (require 'clang-format nil 'noerror)
-    (global-set-key (kbd "C-c f |") 'clang-format-region)
-    (global-set-key (kbd "C-c f b") 'clang-format-buffer))
 
-  ;;(global-set-key (kbd "C-:") 'ac-complete-with-helm)
-  ;;(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
-  ;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
+  (defun clang-format-region (char-start char-end &optional style)
+    "Use clang-format to format the code between START and END according to STYLE.
+  If called interactively uses the region or the current statement if there
+  is no active region.  If no style is given uses `clang-format-style'."
+    (interactive
+     (if (use-region-p)
+         (list (region-beginning) (region-end))
+       (list (point) (point))))
+
+    (unless style
+      (setq style clang-format-style))
+
+    (let ((start (1- (position-bytes char-start)))
+          (end (1- (position-bytes char-end)))
+          (cursor (1- (position-bytes (point))))
+          (temp-buffer (generate-new-buffer " *clang-format-temp*"))
+          (temp-file (make-temp-file "clang-format")))
+      (unwind-protect
+          (let (status stderr operations)
+            (setq status
+                  (call-process-region
+                   (point-min) (point-max) clang-format-executable
+                   nil `(,temp-buffer ,temp-file) nil
+
+                   "-output-replacements-xml"
+                   ;;"-sort-includes"
+                   "-assume-filename" (or (buffer-file-name) "")
+                   "-style" style
+                   "-offset" (number-to-string start)
+                   "-length" (number-to-string (- end start))
+                   "-cursor" (number-to-string cursor)))
+            (setq stderr
+                  (with-temp-buffer
+                    (insert-file-contents temp-file)
+                    (when (> (point-max) (point-min))
+                      (insert ": "))
+                    (buffer-substring-no-properties
+                     (point-min) (line-end-position))))
+
+            (cond
+             ((stringp status)
+              (error "(clang-format killed by signal %s%s)" status stderr))
+             ((not (equal 0 status))
+              (error "(clang-format failed with code %d%s)" status stderr)))
+
+            (with-current-buffer temp-buffer
+              (setq operations (clang-format--extract (car (xml-parse-region)))))
+
+            (let ((replacements (nth 0 operations))
+                  (cursor (nth 1 operations))
+                  (incomplete-format (nth 2 operations)))
+              (save-excursion
+                (mapc (lambda (rpl)
+                        (apply #'clang-format--replace rpl))
+                      replacements))
+              (when cursor
+                (goto-char (byte-to-position (1+ cursor))))
+              (message "%s" incomplete-format)
+              (if incomplete-format
+                  (message "(clang-format: incomplete (syntax errors)%s)" stderr)
+                (message "(clang-format: success%s)" stderr))))
+        (delete-file temp-file)
+        (when (buffer-name temp-buffer) (kill-buffer temp-buffer)))))
 
 
-  (require 'cl) ;; for lexical-let
-  (defun ignore-error-wrapper (fn)
-    "Funtion return new function that ignore errors.
-     The function wraps a function with `ignore-errors' macro."
-    (lexical-let ((fn fn))
-      (lambda ()
-        (interactive)
-        (ignore-errors
-          (funcall fn)))))
+    (global-set-key (kbd "C-x g") 'magit-status)
+    (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
+    (when (require 'clang-format nil 'noerror)
+      (global-set-key (kbd "C-c f |") 'clang-format-region)
+      (global-set-key (kbd "C-c f b") 'clang-format-buffer))
+
+    ;;(global-set-key (kbd "C-:") 'ac-complete-with-helm)
+    ;;(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
+    ;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
+
+
+    (require 'cl) ;; for lexical-let
+    (defun ignore-error-wrapper (fn)
+      "Funtion return new function that ignore errors.
+       The function wraps a function with `ignore-errors' macro."
+      (lexical-let ((fn fn))
+        (lambda ()
+          (interactive)
+          (ignore-errors
+            (funcall fn)))))
 
   (global-set-key [s-left] (ignore-error-wrapper 'windmove-left))
   (global-set-key [s-right] (ignore-error-wrapper 'windmove-right))
   (global-set-key [s-up] (ignore-error-wrapper 'windmove-up))
   (global-set-key [s-down] (ignore-error-wrapper 'windmove-down))
+  (global-set-key [s-mouse-1] 'akt/delete-window-under-mouse)
 
   (global-set-key (kbd "M-x") 'smex)
   (global-set-key (kbd "M-X") 'smex-major-mode-commands)
   (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
   (global-set-key (kbd "C-=") 'er/expand-region)
+
+
 #+END_SRC
