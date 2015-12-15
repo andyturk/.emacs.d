@@ -266,6 +266,8 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 #+BEGIN_SRC emacs-lisp
   (setq akt/agenda-personal (akt/icloud-path "personal.org"))
   (setq akt/agenda-avegant (akt/icloud-path "avegant.org"))
+  (setq akt/agenda-panamint (akt/icloud-path "panamint.org"))
+
   (setq org-default-notes-file (akt/icloud-path (concat akt/hostname "-capture.org")))
 
   (akt/touch-file org-default-notes-file)
@@ -275,7 +277,8 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
   (setq org-agenda-files (list
                           org-default-notes-file
                           akt/agenda-personal
-                          akt/agenda-avegant))
+                          akt/agenda-avegant
+                          akt/agenda-panamint))
 
     (setq org-log-done t)
     (setq org-startup-indented t)
@@ -355,6 +358,13 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
              ((org-sec-who-view "TODO dowith")))))
 
 #+END_SRC
+
+#+begin_src emacs-lisp
+  (defcustom org-clock-persist-file (akt/icloud-path "org-clock-save.el")
+    "Where to save Andy's Org Mode clocks" :group 'org-clock :type 'string)
+  (setq org-clock-persist 'history)
+  (org-clock-persistence-insinuate)
+#+end_src
 * Non-standard Features
 ** Git
 #+BEGIN_SRC emacs-lisp
