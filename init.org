@@ -627,3 +627,15 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 
 
 #+END_SRC
+* gnus
+#+begin_src unused-emacs-lisp
+  (setq message-send-mail-function 'smtpmail-send-it
+        smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+        smtpmail-auth-credentials '(("smtp.gmail.com" 587 "andyturk@gmail.com" nil))
+        smtpmail-default-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-service 587
+        starttls-gnutls-program "/opt/local/bin/gnutls-cli"
+        starttls-extra-arguments nil
+        starttls-use-gnutls t)
+#+end_src
