@@ -460,10 +460,6 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 
   (define-key isearch-mode-map (kbd "<backspace>") 'isearch-delete-something)
 #+end_src
-** clang-format
-#+begin_src emacs-lisp
-(load-library "clang-format")
-#+end_src
 ** neotree
 #+begin_src emacs-lisp
   (require 'neotree)
@@ -506,7 +502,7 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 #+BEGIN_SRC emacs-lisp
 (require 'key-chord)
 (key-chord-mode 1)
-(key-chord-define-global "FF" 'clang-format)
+;;(key-chord-define-global "FF" 'clang-format)
 (key-chord-define-global "nm" 'neotree-toggle)
 (key-chord-define-global "cm" 'compile)
 (key-chord-define-global "dm" 'gdb)
@@ -600,8 +596,8 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
     (global-set-key (kbd "C-x g") 'magit-status)
     (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
     (when (require 'clang-format nil 'noerror)
-      (global-set-key (kbd "C-c f |") 'clang-format-region)
-      (global-set-key (kbd "C-c f b") 'clang-format-buffer))
+      (global-set-key (kbd "C-c C-f C-r") 'clang-format-region)
+      (global-set-key (kbd "C-c C-f C-b") 'clang-format-buffer))
 
     ;;(global-set-key (kbd "C-:") 'ac-complete-with-helm)
     ;;(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
