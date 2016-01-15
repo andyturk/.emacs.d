@@ -84,6 +84,8 @@ Try to save customized values somewhere other than in the main init file
 ;;(menu-bar-mode -1)
 (scroll-bar-mode -1)
 (setq split-height-threshold nil)
+(require 'smooth-scrolling)
+(setq smooth-scroll-margin 5)
 #+END_SRC
 ** Tweaks
 #+BEGIN_SRC emacs-lisp
