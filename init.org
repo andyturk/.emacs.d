@@ -196,7 +196,9 @@ All elements of this alist are checked, meaning you can enable multiple minor mo
         ("\\.mk"		 . makefile-mode)
         ("\\.cshrc"		 . sh-mode)
         ("\\.html$"		 . html-mode)
-        ("\\.org$"		 . org-mode))) auto-mode-alist))
+        ("\\.org$"		 . org-mode)
+        ("\\.md$"          . markdown-mode)
+        )) auto-mode-alist))
 
 (defun enable-minor-mode-based-on-extension ()
   "check file name against auto-minor-mode-alist to enable minor modes
@@ -520,6 +522,10 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
     (mouse-set-point EVENT)
     (delete-window))
 #+end_src
+** reveal.js
+ #+begin_src emacs-lisp
+(setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+ #+end_src
 * Keyboard Bindings
 ** Key Chords
 #+BEGIN_SRC emacs-lisp
