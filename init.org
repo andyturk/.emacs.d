@@ -271,7 +271,8 @@ the checking happens for all pairs in auto-minor-mode-alist"
 #+begin_src emacs-lisp
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((gnuplot . t)))
+   '((gnuplot . t)
+     (dot . t)))
 #+end_src
 
 Org mode data is saved within an iCloud directory so that it'll be replicated to all my machines.
