@@ -272,7 +272,9 @@ the checking happens for all pairs in auto-minor-mode-alist"
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((gnuplot . t)
-     (dot . t)))
+     (dot . t)
+    )
+   )
 #+end_src
 
 Org mode data is saved within an iCloud directory so that it'll be replicated to all my machines.
@@ -294,7 +296,13 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
   (defun gtd ()
     "Getting Things Done"
     (interactive)
+    (find-file-noselect akt/agenda-versame)
     (switch-to-buffer (find-file-noselect akt/gtd)))
+
+  (defun versame ()
+    "Begin working on VersaMe tasks"
+    (interactive)
+    (switch-to-buffer (find-file-noselect akt/agenda-versame)))
 #+end_src
 
 #+BEGIN_SRC emacs-lisp
@@ -305,29 +313,29 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
                           akt/agenda-panamint
                           akt/gtd))
 
-    (setq org-log-done t)
-    (setq org-startup-indented t)
-    (setq org-directory akt/icloud-directory)
-    (add-hook 'org-mode-hook (lambda () (auto-revert-mode 1)))
-    (setq org-refile-targets (list (cons akt/agenda-avegant '(:maxlevel . 2))))
+  (setq org-log-done t)
+  (setq org-startup-indented t)
+  (setq org-directory akt/icloud-directory)
+  (add-hook 'org-mode-hook (lambda () (auto-revert-mode 1)))
+  (setq org-refile-targets (list (cons akt/agenda-avegant '(:maxlevel . 2))))
 
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "|" "DONE(d)" "CNCL(c)")
-            (sequence "MAYB(m)" "|" "CNCL(c)")))
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "|" "DONE(d)" "CNCL(c)")
+          (sequence "TASK(T)" "|" "DONE(d)")
+          (sequence "MAYB(m)" "|" "CNCL(c)")))
 
-    (setq org-todo-keyword-faces
-          '(("TODO" . (:foreground "DarkOrange1" :weight bold))
-            ("MAYB" . (:foreground "sea green"))
-            ("DONE" . (:foreground "light sea green"))
-            ("CNCL" . (:foreground "forest green")) ))
+  (setq org-todo-keyword-faces
+        '(("TODO" . (:foreground "DarkOrange1" :weight bold))
+          ("MAYB" . (:foreground "sea green"))
+          ("DONE" . (:foreground "light sea green"))
+          ("CNCL" . (:foreground "forest green")) 
+          ("TASK" . (:foreground "blue"))
+          ))
 
-    (setq org-todo-keyword-faces
-          '(("TODO" . (:foreground "DarkOrange1" :weight bold))
-            ("MAYB" . (:foreground "sea green"))
-            ("DONE" . (:foreground "light sea green"))
-            ("CNCL" . (:foreground "forest green")) ))
-
-    (setq org-sec-me "andyt")
+  (setq org-tags-exclude-from-inheritance '("prj"))
+  (setq org-stuck-projects '("+prj/-MAYB-DONE" ("TODO" "TASK") ()))
+        
+  (setq org-sec-me "akt")
 
   (setq akt/org-capture-meeting-template
   "* TODO akt/Discuss %? :MEET:
@@ -342,6 +350,23 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
     - [ ] action2
   "
   )
+
+  (setq org-agenda-custom-commands
+        '(("h" "Work todos" tags-todo
+           "-personal-doat={.+}-dowith={.+}/!-TASK"
+           ((org-agenda-todo-ignore-scheduled t)))
+          ("H" "All work todos" tags-todo "-personal/!-TASK-MAYB"
+           ((org-agenda-todo-ignore-scheduled nil)))
+          ("A" "Work todos with doat or dowith" tags-todo
+           "-personal+doat={.+}|dowith={.+}/!-TASK"
+           ((org-agenda-todo-ignore-scheduled nil)))
+          ("j" "TODO dowith and TASK with"
+           ((org-sec-with-view "TODO dowith")
+            (org-sec-where-view "TODO doat")
+            (org-sec-assigned-with-view "TASK with")
+            (org-sec-stuck-with-view "STUCK with")))
+          ("J" "Interactive TODO dowith and TASK with"
+           ((org-sec-who-view "TODO dowith")))))
 
   (setq akt/org-capture-todo-template
   "* TODO %?
@@ -362,22 +387,6 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
          (list "n" "note" 'entry '(file org-default-notes-file) akt/org-capture-note-template)
          ))
 
-    (setq org-agenda-custom-commands
-          '(("h" "Work todos" tags-todo
-             "-personal-doat={.+}-dowith={.+}/!-TASK"
-             ((org-agenda-todo-ignore-scheduled t)))
-            ("H" "All work todos" tags-todo "-personal/!-TASK-MAYB"
-             ((org-agenda-todo-ignore-scheduled nil)))
-            ("A" "Work todos with doat or dowith" tags-todo
-             "-personal+doat={.+}|dowith={.+}/!-TASK"
-             ((org-agenda-todo-ignore-scheduled nil)))
-            ("j" "TODO dowith and TASK with"
-             ((org-sec-with-view "TODO dowith")
-              (org-sec-where-view "TODO doat")
-              (org-sec-assigned-with-view "TASK with")
-              (org-sec-stuck-with-view "STUCK with")))
-            ("J" "Interactive TODO dowith and TASK with"
-             ((org-sec-who-view "TODO dowith")))))
 
 #+END_SRC
 
@@ -417,6 +426,10 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
           (format-time-string (car org-time-stamp-formats)
                               (seconds-to-time end))))
         (setq start (+ 86400 start))))))
+#+end_src
+** reveal.js
+#+begin_src emacs-lisp
+(require 'ox-reveal)
 #+end_src
 * Non-standard Features
 ** Git
