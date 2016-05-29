@@ -441,6 +441,10 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 
 
 #+end_src
+** reveal.js
+#+begin_src emacs-lisp
+(require 'ox-reveal)
+#+end_src
 * Non-standard Features
 ** Git
 #+BEGIN_SRC emacs-lisp
