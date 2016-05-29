@@ -311,73 +311,6 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
     (add-hook 'org-mode-hook (lambda () (auto-revert-mode 1)))
     (setq org-refile-targets (list (cons akt/agenda-avegant '(:maxlevel . 2))))
 
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "|" "DONE(d)" "CNCL(c)")
-            (sequence "MAYB(m)" "|" "CNCL(c)")))
-
-    (setq org-todo-keyword-faces
-          '(("TODO" . (:foreground "DarkOrange1" :weight bold))
-            ("MAYB" . (:foreground "sea green"))
-            ("DONE" . (:foreground "light sea green"))
-            ("CNCL" . (:foreground "forest green")) ))
-
-    (setq org-todo-keyword-faces
-          '(("TODO" . (:foreground "DarkOrange1" :weight bold))
-            ("MAYB" . (:foreground "sea green"))
-            ("DONE" . (:foreground "light sea green"))
-            ("CNCL" . (:foreground "forest green")) ))
-
-    (setq org-sec-me "andyt")
-
-  (setq akt/org-capture-meeting-template
-  "* TODO akt/Discuss %? :MEET:
-    SCHEDULED: %^{When?}T
-  ,** Who
-    - [ ] %(eval 'org-sec-me)
-  ,** Agenda
-    - [ ] item1\n   - [ ] item2
-  ,** Discussion
-  ,** Actions
-    - [ ] action1
-    - [ ] action2
-  "
-  )
-
-  (setq akt/org-capture-todo-template
-  "* TODO %?
-  %U
-  %a
-  "
-  )
-
-  (setq akt/org-capture-note-template
-  "* note: %?
-  "
-  )
-
-  (setq org-capture-templates
-        (list
-         (list "t" "todo" 'entry '(file org-default-notes-file) akt/org-capture-todo-template)
-         (list "m" "meeting" 'entry '(file org-default-notes-file) akt/org-capture-meeting-template)
-         (list "n" "note" 'entry '(file org-default-notes-file) akt/org-capture-note-template)
-         ))
-
-    (setq org-agenda-custom-commands
-          '(("h" "Work todos" tags-todo
-             "-personal-doat={.+}-dowith={.+}/!-TASK"
-             ((org-agenda-todo-ignore-scheduled t)))
-            ("H" "All work todos" tags-todo "-personal/!-TASK-MAYB"
-             ((org-agenda-todo-ignore-scheduled nil)))
-            ("A" "Work todos with doat or dowith" tags-todo
-             "-personal+doat={.+}|dowith={.+}/!-TASK"
-             ((org-agenda-todo-ignore-scheduled nil)))
-            ("j" "TODO dowith and TASK with"
-             ((org-sec-with-view "TODO dowith")
-              (org-sec-where-view "TODO doat")
-              (org-sec-assigned-with-view "TASK with")
-              (org-sec-stuck-with-view "STUCK with")))
-            ("J" "Interactive TODO dowith and TASK with"
-             ((org-sec-who-view "TODO dowith")))))
 
 #+END_SRC
 
@@ -417,6 +350,79 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
           (format-time-string (car org-time-stamp-formats)
                               (seconds-to-time end))))
         (setq start (+ 86400 start))))))
+#+end_src
+** org-secretary
+#+begin_src emacs-lisp
+    (load-file "~/.emacs.d/lisp/org-secretary.elc")
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "|" "DONE(d)" "CNCL(c)")
+            (sequence "TASK(f)" "|" "DONE(d)")
+            (sequence "MAYB(m)" "|" "CNCL(c)")))
+
+    (setq org-todo-keyword-faces
+          '(("TODO" . (:foreground "DarkOrange1" :weight bold))
+            ("MAYB" . (:foreground "sea green"))
+            ("DONE" . (:foreground "light sea green"))
+            ("CNCL" . (:foreground "forest green"))
+            ("TASK" . (:foreground "blue"))
+            ))
+
+    (setq org-tags-exclude-from-inheritance '("prj")
+          org-stuck-projects '("+prj/-MAYBE-DONE"
+                               ("TODO" "TASK") ()))
+    (setq org-sec-me "akt")
+
+    (setq org-agenda-custom-commands
+          '(("h" "Work todos" tags-todo
+             "-personal-doat={.+}-dowith={.+}/!-TASK"
+             ((org-agenda-todo-ignore-scheduled t)))
+            ("H" "All work todos" tags-todo "-personal/!-TASK-MAYB"
+             ((org-agenda-todo-ignore-scheduled nil)))
+            ("A" "Work todos with doat or dowith" tags-todo
+             "-personal+doat={.+}|dowith={.+}/!-TASK"
+             ((org-agenda-todo-ignore-scheduled nil)))
+            ("j" "TODO dowith and TASK with"
+             ((org-sec-with-view "TODO dowith")
+              (org-sec-where-view "TODO doat")
+              (org-sec-assigned-with-view "TASK with")
+              (org-sec-stuck-with-view "STUCK with")))
+            ("J" "Interactive TODO dowith and TASK with"
+             ((org-sec-who-view "TODO dowith")))))
+
+    (setq akt/org-capture-meeting-template
+  "* TODO akt/Discuss %? :MEET:
+    SCHEDULED: %^{When?}T
+  ,** Who
+    - [ ] %(eval 'org-sec-me)
+  ,** Agenda
+    - [ ] item1\n   - [ ] item2
+  ,** Discussion
+  ,** Actions
+    - [ ] action1
+    - [ ] action2
+  "
+  )
+
+  (setq akt/org-capture-todo-template
+  "* TODO %?
+  %U
+  %a
+  "
+  )
+
+  (setq akt/org-capture-note-template
+  "* note: %?
+  "
+  )
+
+  (setq org-capture-templates
+        (list
+         (list "t" "todo" 'entry '(file org-default-notes-file) akt/org-capture-todo-template)
+         (list "m" "meeting" 'entry '(file org-default-notes-file) akt/org-capture-meeting-template)
+         (list "n" "note" 'entry '(file org-default-notes-file) akt/org-capture-note-template)
+         ))
+
+
 #+end_src
 * Non-standard Features
 ** Git

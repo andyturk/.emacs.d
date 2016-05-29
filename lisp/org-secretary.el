@@ -131,6 +131,7 @@
                        (if (string= w "")
                            nil
                          w))))
+(global-set-key "\C-cw" 'org-sec-set-with)
 
 (defun org-sec-set-where ()
   "Changes the value of the org-sec-where variable for use
@@ -139,6 +140,7 @@
   (setq org-sec-where
         (read-string "Where: " nil
                      'org-sec-where-history "")))
+(global-set-key "\C-cW" 'org-sec-set-where)
 
 (defun org-sec-set-dowith ()
   "Sets the value of the dowith property."
@@ -148,6 +150,7 @@
                       nil 'org-sec-dowith-history "")))
     (unless (string= do-with "")
       (org-entry-put nil "dowith" do-with))))
+(global-set-key "\C-cd" 'org-sec-set-dowith)
 
 (defun org-sec-set-doat ()
   "Sets the value of the doat property."
@@ -156,6 +159,7 @@
                             nil 'org-sec-doat-history "")))
     (unless (string= do-at "")
       (org-entry-put nil "doat" do-at))))
+(global-set-key "\C-cD" 'org-sec-set-doat)
 
 (defun org-sec-tag-entry ()
   "Adds a :with: property with the value of org-sec-with if
@@ -170,6 +174,7 @@
       (org-entry-put nil "at" org-sec-where))
     (if org-sec-with
         (org-entry-put nil "with" org-sec-with))))
+(global-set-key "\C-cj" 'org-sec-tag-entry)
 
 (defun join (lst sep &optional pre post)
   (mapconcat (function (lambda (x) (concat pre x post))) lst sep))
@@ -222,9 +227,4 @@
 
 (provide 'org-secretary)
 
-(global-set-key "\C-cw" 'org-sec-set-with)
-(global-set-key "\C-cW" 'org-sec-set-where)
-(global-set-key "\C-cd" 'org-sec-set-dowith)
-(global-set-key "\C-cD" 'org-sec-set-doat)
-(global-set-key "\C-cj" 'org-sec-tag-entry)
 ;;; org-secretary.el ends here
