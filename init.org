@@ -279,7 +279,6 @@ the checking happens for all pairs in auto-minor-mode-alist"
 
 Org mode data is saved within an iCloud directory so that it'll be replicated to all my machines.
 #+BEGIN_SRC emacs-lisp
-  (setq akt/agenda-avegant (akt/icloud-path "avegant.org"))
   (setq akt/agenda-versame (akt/icloud-path "versame.org"))
   (setq akt/agenda-panamint (akt/icloud-path "panamint.org"))
   (setq akt/gtd (akt/icloud-path "gtd.org"))
@@ -288,11 +287,6 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 #+END_SRC 
 
 #+begin_src emacs-lisp
-  (defun avegant ()
-    "Begin working on Avegant tasks"
-    (interactive)
-    (switch-to-buffer (find-file-noselect akt/agenda-avegant)))
-
   (defun gtd ()
     "Getting Things Done"
     (interactive)
@@ -302,7 +296,6 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-files (list
                           org-default-notes-file
-                          akt/agenda-avegant
                           akt/agenda-versame
                           akt/agenda-panamint
                           akt/gtd))
@@ -311,8 +304,7 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
     (setq org-startup-indented t)
     (setq org-directory akt/icloud-directory)
     (add-hook 'org-mode-hook (lambda () (auto-revert-mode 1)))
-    (setq org-refile-targets (list (cons akt/agenda-avegant '(:maxlevel . 2))))
-
+    (setq org-refile-targets (list (cons akt/agenda-versame '(:maxlevel . 2))))
 
 #+END_SRC
 
