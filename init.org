@@ -290,7 +290,13 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
   (defun gtd ()
     "Getting Things Done"
     (interactive)
+    (find-file-noselect akt/agenda-versame)
     (switch-to-buffer (find-file-noselect akt/gtd)))
+
+  (defun versame ()
+    "Begin working on VersaMe tasks"
+    (interactive)
+    (switch-to-buffer (find-file-noselect akt/agenda-versame)))
 #+end_src
 
 #+BEGIN_SRC emacs-lisp
