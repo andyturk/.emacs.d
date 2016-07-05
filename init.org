@@ -355,15 +355,15 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 #+begin_src emacs-lisp
     (load-file "~/.emacs.d/lisp/org-secretary.elc")
     (setq org-todo-keywords
-          '((sequence "TODO(t)" "|" "DONE(d)" "CNCL(c)")
+          '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)" "CANCELED(c)")
             (sequence "TASK(f)" "|" "DONE(d)")
-            (sequence "MAYB(m)" "|" "CNCL(c)")))
+            (sequence "MAYBE(m)" "|" "CANCELED(c)")))
 
     (setq org-todo-keyword-faces
           '(("TODO" . (:foreground "DarkOrange1" :weight bold))
-            ("MAYB" . (:foreground "sea green"))
+            ("MAYBE" . (:foreground "sea green"))
             ("DONE" . (:foreground "light sea green"))
-            ("CNCL" . (:foreground "forest green"))
+            ("CANCELED" . (:foreground "forest green"))
             ("TASK" . (:foreground "blue"))
             ))
 
@@ -376,7 +376,7 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
           '(("h" "Work todos" tags-todo
              "-personal-doat={.+}-dowith={.+}/!-TASK"
              ((org-agenda-todo-ignore-scheduled t)))
-            ("H" "All work todos" tags-todo "-personal/!-TASK-MAYB"
+            ("H" "All work todos" tags-todo "-personal/!-TASK-MAYBE"
              ((org-agenda-todo-ignore-scheduled nil)))
             ("A" "Work todos with doat or dowith" tags-todo
              "-personal+doat={.+}|dowith={.+}/!-TASK"
@@ -407,7 +407,7 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
         '(("h" "Work todos" tags-todo
            "-personal-doat={.+}-dowith={.+}/!-TASK"
            ((org-agenda-todo-ignore-scheduled t)))
-          ("H" "All work todos" tags-todo "-personal/!-TASK-MAYB"
+          ("H" "All work todos" tags-todo "-personal/!-TASK-MAYBE"
            ((org-agenda-todo-ignore-scheduled nil)))
           ("A" "Work todos with doat or dowith" tags-todo
            "-personal+doat={.+}|dowith={.+}/!-TASK"
