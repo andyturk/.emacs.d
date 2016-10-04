@@ -290,6 +290,7 @@ Babel languages: gnuplot and dot
    'org-babel-load-languages
    '((gnuplot . t)
      (dot . t)
+     (sql . t)
     )
    )
 #+end_src
