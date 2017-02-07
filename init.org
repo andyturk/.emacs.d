@@ -291,8 +291,13 @@ Babel languages: gnuplot and dot
    '((gnuplot . t)
      (dot . t)
      (sql . t)
+     (mscgen . t)
     )
    )
+#+end_src
+
+#+begin_src emacs-lisp
+    (load-file "~/.emacs.d/lisp/ob-mscgen.elc")
 #+end_src
 
 Org mode data is saved within an iCloud directory so that it'll be replicated to all my machines.
