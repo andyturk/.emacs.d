@@ -198,6 +198,8 @@ All elements of this alist are checked, meaning you can enable multiple minor mo
         ("\\.html$"		 . html-mode)
         ("\\.org$"		 . org-mode)
         ("\\.md$"          . markdown-mode)
+        ("\\.bin$"         . hexl-mode)
+        ("\\.swift$"       . swift-mode)
         )) auto-mode-alist))
 
 (defun enable-minor-mode-based-on-extension ()
@@ -265,6 +267,20 @@ the checking happens for all pairs in auto-minor-mode-alist"
                    (split-window-vertically))))
 
       (add-hook 'compilation-mode-hook 'akt/compilation-mode-hook)
+
+#+end_src
+** lldb
+#+begin_src emacs-lisp
+
+(load-file "~/.emacs.d/lisp/gud.elc")
+(defun file-local-name (file)
+  "Return the local name component of FILE.
+It returns a file name which can be used directly as argument of
+`process-file', `start-file-process', or `shell-command'."
+  (or (file-remote-p file 'localname) file))
+
+;; http://stackoverflow.com/questions/9132826/stop-developer-tools-access-needs-to-take-control-of-another-process-for-debugg
+;; sudo /usr/sbin/DevToolsSecurity --enable
 
 #+end_src
 * Org Mode Setup
@@ -721,7 +737,7 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
   (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
   (global-set-key (kbd "C-=") 'er/expand-region)
 
-
+  (global-set-key (kbd "M-*") 'pop-tag-mark)
 #+END_SRC
 * gnus
 #+begin_src unused-emacs-lisp
