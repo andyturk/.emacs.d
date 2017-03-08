@@ -163,6 +163,15 @@ Try to save customized values somewhere other than in the main init file
   ))
 
 #+end_src
+** Scrollwheel
+#+begin_src emacs-lisp
+(global-set-key (kbd "<wheel-right>") (lambda () (interactive) (message "wheeling right")))
+(global-set-key (kbd "<wheel-left>") (lambda () (interactive) (message "wheeling left")))
+(global-set-key (kbd "<double-wheel-right>") (lambda () (interactive) (message "wheeling right")))
+(global-set-key (kbd "<double-wheel-left>") (lambda () (interactive) (message "wheeling left")))
+(global-set-key (kbd "<triple-wheel-right>") (lambda () (interactive) (message "wheeling right")))
+(global-set-key (kbd "<triple-wheel-left>") (lambda () (interactive) (message "wheeling left")))
+#+end_src
 * File/mode association
 #+BEGIN_SRC emacs-lisp
 (defvar auto-minor-mode-alist
