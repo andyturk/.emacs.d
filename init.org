@@ -210,6 +210,7 @@ All elements of this alist are checked, meaning you can enable multiple minor mo
         ("\\.md$"          . markdown-mode)
         ("\\.bin$"         . hexl-mode)
         ("\\.swift$"       . swift-mode)
+        ("\\.yaml  "       . yaml-mode)
         )) auto-mode-alist))
 
 (defun enable-minor-mode-based-on-extension ()
