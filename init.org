@@ -338,6 +338,11 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
     "Begin working on VersaMe tasks"
     (interactive)
     (switch-to-buffer (find-file-noselect akt/agenda-versame)))
+
+  (defun panamint ()
+    "Begin working on Panamint Engineering LLC tasks"
+    (interactive)
+    (switch-to-buffer (find-file-noselect akt/agenda-panamint)))
 #+end_src
 
 #+BEGIN_SRC emacs-lisp
