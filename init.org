@@ -743,6 +743,7 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
         (when (buffer-name temp-buffer) (kill-buffer temp-buffer)))))
 
 
+    (global-set-key (kbd "C-M-q") 'unfill-paragraph)
     (global-set-key (kbd "C-x g") 'magit-status)
     (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
     (when (require 'clang-format nil 'noerror)
