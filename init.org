@@ -18,6 +18,7 @@ Try to save customized values somewhere other than in the main init file
 (package-initialize)
 (setq package-archives
  '(;;("ELPA"      . "http://tromey.com/elpa/")
+   ("org"     . "https://orgmode.org/elpa/")
    ("gnu"       . "https://elpa.gnu.org/packages/")
    ("melpa"     . "https://melpa.milkbox.net/packages/")
    ;;("marmalade" . "http://marmalade-repo.org/packages")
@@ -490,7 +491,7 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 
 #+end_src
 ** reveal.js
-#+begin_src emacs-lisp
+#+begin_src unused-emacs-lisp
 (require 'ox-reveal)
 #+end_src
 * Non-standard Features
@@ -498,6 +499,11 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 #+BEGIN_SRC emacs-lisp
 (setq magit-last-seen-setup-instructions "1.4.0")
 (setq magit-push-always-verify nil)
+
+(magit-add-section-hook 'magit-status-sections-hook
+                          'magit-insert-modules-overview
+                          'magit-insert-unpulled-from-upstream)
+
 (require 'git-blame)
 #+END_SRC
 ** Fill Column
