@@ -500,9 +500,10 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 (setq magit-last-seen-setup-instructions "1.4.0")
 (setq magit-push-always-verify nil)
 
-(magit-add-section-hook 'magit-status-sections-hook
+(with-eval-after-load 'magit
+  (magit-add-section-hook 'magit-status-sections-hook
                           'magit-insert-modules-overview
-                          'magit-insert-unpulled-from-upstream)
+                          'magit-insert-unpulled-from-upstream))
 
 (require 'git-blame)
 #+END_SRC
