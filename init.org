@@ -305,8 +305,13 @@ Babel languages: gnuplot and dot
      (dot . t)
      (sql . t)
      (mscgen . t)
+     (octave . t)
     )
-   )
+    )
+#+end_src
+
+#+begin_src emacs-lisp
+(setq org-babel-octave-shell-command "/Applications/Octave.app/Contents/Resources/usr/bin/octave -q")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -494,6 +499,11 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 #+begin_src unused-emacs-lisp
 (require 'ox-reveal)
 #+end_src
+* Projectile
+#+begin_src emacs-lisp
+(projectile-global-mode)
+#+end_src
+
 * Non-standard Features
 ** Git
 #+BEGIN_SRC emacs-lisp
