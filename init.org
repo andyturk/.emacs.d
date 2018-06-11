@@ -664,6 +664,11 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
     (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
     (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 #+end_src
+** dired
+#+begin_src emacs-lisp
+(setq dired-dwim-target t)
+#+end_src
+#+end_src
 * Keyboard Bindings
 ** Key Chords
 #+BEGIN_SRC emacs-lisp
