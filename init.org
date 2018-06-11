@@ -686,6 +686,40 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 (key-chord-define-global "cm" 'compile)
 ;;(key-chord-define-global "dm" 'gdb)
 #+END_SRC
+** ibuffer
+#+begin_src emacs-lisp
+(defun akt/ibuffer-projectile ()
+"First generates ibuffer groups by Projectile project, then calls ibuffer"
+(interactive)
+(ibuffer-projectile-set-filter-groups)
+(ibuffer))
+#+end_src
+
+#+begin_src emacs-lisp
+;; Use human readable Size column instead of original one
+(define-ibuffer-column size-h
+  (:name "Size" :inline t)
+  (cond
+   ((> (buffer-size) 1000000) (format "%7.1fM" (/ (buffer-size) 1000000.0)))
+   ((> (buffer-size) 100000) (format "%7.0fk" (/ (buffer-size) 1000.0)))
+   ((> (buffer-size) 1000) (format "%7.1fk" (/ (buffer-size) 1000.0)))
+   (t (format "%8d" (buffer-size)))))
+
+;; Modify the default ibuffer-formats
+  (setq ibuffer-formats
+	'((mark modified read-only " "
+		(name 18 18 :left :elide)
+		" "
+		(size-h 9 -1 :right)
+		" "
+		(mode 16 16 :left :elide)
+		" "
+		filename-and-process)))
+#+end_src
+
+#+begin_src emacs-lisp
+(define-key global-map (kbd "C-x C-b") 'akt/ibuffer-projectile)
+#+end_src
 ** Org Mode
 #+BEGIN_SRC emacs-lisp
   (define-key global-map (kbd "C-c c") 'org-capture)
