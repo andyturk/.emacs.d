@@ -668,6 +668,13 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 #+begin_src emacs-lisp
 (setq dired-dwim-target t)
 #+end_src
+** fix ggtags behavior
+#+begin_src emacs-lisp
+
+(require 'ggtags)
+(define-key ggtags-navigation-map (kbd "<return>") nil)
+(define-key ggtags-navigation-map (kbd "C-c C-c") 'ggtags-navigation-mode-done)
+
 #+end_src
 * Keyboard Bindings
 ** Key Chords
