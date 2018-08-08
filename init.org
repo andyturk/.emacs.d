@@ -306,8 +306,11 @@ Babel languages: gnuplot and dot
      (sql . t)
      (mscgen . t)
      (octave . t)
+     (awk . t)
     )
     )
+
+(setq org-babel-awk-command "gawk")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -502,6 +505,7 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 * Projectile
 #+begin_src emacs-lisp
 (projectile-global-mode)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 #+end_src
 
 * Non-standard Features
