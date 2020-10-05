@@ -1,3 +1,4 @@
+
 # -*- mode: org -*-
 
 * Emacs Setup
@@ -10,24 +11,22 @@ Try to save customized values somewhere other than in the main init file
 (unless (file-exists-p custom-file) (write-region "" "" custom-file))
 
 (load custom-file)
+
+;; don't open a backtrace buffer if there's an error (it's annoying)
+(setq debug-on-error nil)
 #+END_SRC
 
 ** Package Management
 #+BEGIN_SRC emacs-lisp
 (require 'package)
-(package-initialize)
-(setq package-archives
- '(;;("ELPA"      . "http://tromey.com/elpa/")
-   ("org"     . "https://orgmode.org/elpa/")
-   ("gnu"       . "https://elpa.gnu.org/packages/")
-   ("melpa"     . "https://melpa.milkbox.net/packages/")
-   ;;("marmalade" . "http://marmalade-repo.org/packages")
-))
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;;(package-initialize)
 #+END_SRC
 ** Load Paths
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path (concat user-init-file ".d/lisp"))
-;;(add-to-list 'load-path (concat user-init-file ".d/helm"))
 #+END_SRC
 
 ** General functions
@@ -99,8 +98,8 @@ Try to save customized values somewhere other than in the main init file
 ** Colors
 #+BEGIN_SRC emacs-lisp
 (load-theme 'solarized-dark t)
-(setq sml/theme 'dark)
-(sml/setup)
+;;(setq sml/theme 'dark)
+;;(sml/setup)
 #+END_SRC
 ** Visual Bell
 #+BEGIN_SRC emacs-lisp
@@ -243,7 +242,7 @@ the checking happens for all pairs in auto-minor-mode-alist"
 * Language Support
 ** Python
 #+BEGIN_SRC emacs-lisp
-(require 'highlight-indentation)
+;;(require 'highlight-indentation)
 #+END_SRC
 ** C++
 #+BEGIN_SRC emacs-lisp
@@ -307,6 +306,7 @@ Babel languages: gnuplot and dot
      (mscgen . t)
      (octave . t)
      (awk . t)
+     (shell . t)
     )
     )
 
@@ -498,10 +498,6 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 
 
 #+end_src
-** reveal.js
-#+begin_src unused-emacs-lisp
-(require 'ox-reveal)
-#+end_src
 * Projectile
 #+begin_src emacs-lisp
 (projectile-global-mode)
@@ -518,7 +514,7 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
   (magit-add-section-hook 'magit-status-sections-hook
                           'magit-insert-modules-overview
                           'magit-insert-unpulled-from-upstream))
-(magit-todos-mode)
+;; (magit-todos-mode)
 (require 'git-blame)
 #+END_SRC
 ** Fill Column
@@ -548,13 +544,6 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 
 (global-set-key "%" 'match-paren)
 #+END_SRC
-** Helm
-#+BEGIN_SRC emacs-lisp
-;;(require 'helm)
-;;(require 'helm-config)
-;;(require 'helm-match-plugin)
-#+END_SRC
-
 ** Occur Mode
 #+BEGIN_SRC emacs-lisp
 ;; Alex Schroeder [http://www.emacswiki.org/cgi-bin/wiki/OccurBuffer]
@@ -742,7 +731,7 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
   (global-set-key (kbd "C-c a") 'org-agenda)
 
 #+END_SRC
-** Other
+** clang-format
 #+BEGIN_SRC emacs-lisp
 
   (defun clang-format-region (char-start char-end &optional style)
@@ -817,25 +806,6 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
       (global-set-key (kbd "C-c C-f C-r") 'clang-format-region)
       (global-set-key (kbd "C-c C-f C-b") 'clang-format-buffer))
 
-    ;;(global-set-key (kbd "C-:") 'ac-complete-with-helm)
-    ;;(define-key ac-complete-mode-map (kbd "C-:") 'ac-complete-with-helm)
-    ;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
-
-
-    (require 'cl) ;; for lexical-let
-    (defun ignore-error-wrapper (fn)
-      "Funtion return new function that ignore errors.
-       The function wraps a function with `ignore-errors' macro."
-      (lexical-let ((fn fn))
-        (lambda ()
-          (interactive)
-          (ignore-errors
-            (funcall fn)))))
-
-  (global-set-key [s-left] (ignore-error-wrapper 'windmove-left))
-  (global-set-key [s-right] (ignore-error-wrapper 'windmove-right))
-  (global-set-key [s-up] (ignore-error-wrapper 'windmove-up))
-  (global-set-key [s-down] (ignore-error-wrapper 'windmove-down))
   (global-set-key [s-mouse-1] 'akt/delete-window-under-mouse)
 
   (global-set-key (kbd "M-x") 'smex)
@@ -845,6 +815,18 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 
   (global-set-key (kbd "M-*") 'pop-tag-mark)
 #+END_SRC
+** unfill paragraph
+#+begin_src emacs-lisp
+;;; It is the opposite of fill-paragraph    
+(defun unfill-paragraph ()
+  "Takes a multi-line paragraph and makes it into a single line of text."
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-paragraph nil)))
+
+ ;; Handy key definition
+ (global-set-key (kbd "C-M-Q") 'unfill-paragraph)
+#+end_src
 * gnus
 #+begin_src unused-emacs-lisp
   (setq message-send-mail-function 'smtpmail-send-it
@@ -871,7 +853,7 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 (semantic-mode 1)
 #+end_src
 ** Irony
-#+begin_src emacs-lisp
+#+begin_unused_src emacs-lisp
     (add-hook 'c++-mode-hook 'irony-mode)
     (add-hook 'c++-mode-hook 'company-mode)
     (add-hook 'c-mode-hook 'irony-mode)
@@ -904,4 +886,4 @@ Org mode data is saved within an iCloud directory so that it'll be replicated to
 
     (global-set-key [C-tab] 'company-complete)
 
-#+end_src
+#+end_unused_src
